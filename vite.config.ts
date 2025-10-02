@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 import manifest from './src/manifest'
+import * as path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -20,6 +21,11 @@ export default defineConfig(({ mode }) => {
     plugins: [crx({ manifest }), react(), tailwindcss()],
     legacy: {
       skipWebSocketTokenCheck: true,
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
     },
   }
 })

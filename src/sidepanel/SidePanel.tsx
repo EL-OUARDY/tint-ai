@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { useEffect } from 'react'
 
 export const SidePanel = () => {
@@ -34,6 +35,7 @@ export const SidePanel = () => {
   return (
     <main>
       <h3 className="text-2xl text-red-500">SidePanel Page</h3>
+      <Button variant={'outline'}>Hello</Button>
     </main>
   )
 }
