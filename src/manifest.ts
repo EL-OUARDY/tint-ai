@@ -16,10 +16,13 @@ export default defineManifest({
     128: 'img/logo-128.png',
   },
   action: {
-    default_icon: 'img/logo-48.png',
+    default_icon: {
+      16: 'img/logo-16.png',
+      32: 'img/logo-32.png',
+      48: 'img/logo-48.png',
+      128: 'img/logo-128.png',
+    },
   },
-  options_page: 'options.html',
-  devtools_page: 'devtools.html',
   background: {
     service_worker: 'src/background/index.ts',
     type: 'module',
@@ -40,7 +43,4 @@ export default defineManifest({
     },
   ],
   permissions: ['sidePanel', 'storage'],
-  chrome_url_overrides: {
-    newtab: 'newtab.html',
-  },
 })

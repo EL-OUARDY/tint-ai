@@ -1,1 +1,1 @@
-console.info('contentScript is running')
+console.log('contentScript is running')
