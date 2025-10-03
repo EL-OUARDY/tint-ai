@@ -40,7 +40,7 @@ function ColorsTab() {
         {variables.map((color, index) => (
           <div
             key={index}
-            className="color hover:bg-muted flex items-center justify-between px-4 py-2 text-sm"
+            className="color hover:bg-muted mb-1 flex items-center justify-between border px-4 py-2 text-sm"
           >
             <div className="">{color.name}</div>
             <div

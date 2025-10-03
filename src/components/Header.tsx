@@ -14,14 +14,14 @@ function Header() {
         </SheetTrigger>
         <SheetContent side="left" className="w-[300px] !p-4">
           <SheetHeader>
-            <SheetTitle className="font-title mt-8 text-xl">About</SheetTitle>
+            <SheetTitle className="font-title mt-8 mb-2 text-xl">About</SheetTitle>
           </SheetHeader>
           <div className="text-muted-foreground mt-1 text-[0.76rem]">
             <p className="text-sm">
-              This Chrome extension lets you manage your CSS color variables and create stunning
-              color palettes using AI. It analyzes your page's existing colors and helps you
-              generate beautiful, cohesive palettes that actually make sense for your design. No
-              more endless tweaking – just point, click, and get colors that work.
+              TintAI extension lets you manage your CSS color variables and create stunning color
+              palettes using AI. It analyzes your page's existing colors and helps you generate
+              beautiful, cohesive palettes that actually make sense for your design. No more endless
+              tweaking – just point, click, and get colors that work.
             </p>
             <Separator className="my-2" />
             <p className="text-sm">
@@ -52,7 +52,7 @@ function Header() {
         </SheetTrigger>
         <SheetContent side="right" className="w-[300px] !p-4">
           <SheetHeader>
-            <SheetTitle className="mt-8 text-xl">History</SheetTitle>
+            <SheetTitle className="mt-8 mb-2 text-xl">History</SheetTitle>
           </SheetHeader>
           <div className="text-muted-foreground mt-1 text-[0.76rem]">{/* Saved palettes */}</div>
         </SheetContent>

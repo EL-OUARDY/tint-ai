@@ -9,16 +9,16 @@ function GenerateTab() {
   const [apiKey, setApiKey] = useState('')
 
   const examples = [
-    'A dark cyberpunk theme with neon purple and blue accents, perfect for a futuristic dashboard',
-    'Create a minimalist pastel color scheme with soft pinks and blues for a calming productivity app',
-    'I want vibrant sunset colors with warm oranges, deep purples, and golden yellows for a creative portfolio',
-    'Design a professional dark theme with navy blue highlights and crisp white text for a corporate website',
-    'Give me nature-inspired colors with forest greens, earthy browns, and sky blue accents',
-    'A retro 80s inspired theme with hot pink, electric purple, and neon cyan gradients',
-    'Create an ocean-inspired palette with deep sea blues, turquoise accents, and sandy beige tones',
-    'I need a warm coffee shop aesthetic with rich browns, cream, and burnt orange highlights',
-    'Design a midnight blue theme with silver metallic accents and soft purple shadows',
-    'A tropical paradise theme with bright turquoise, lime green, and coral pink for a travel app',
+    'E.g., A dark cyberpunk theme with neon purple and blue accents, perfect for a futuristic dashboard',
+    'E.g., Create a minimalist pastel color scheme with soft pinks and blues for a calming productivity app',
+    'E.g., I want vibrant sunset colors with warm oranges, deep purples, and golden yellows for a creative portfolio',
+    'E.g., Design a professional dark theme with navy blue highlights and crisp white text for a corporate website',
+    'E.g., Give me nature-inspired colors with forest greens, earthy browns, and sky blue accents',
+    'E.g., A retro 80s inspired theme with hot pink, electric purple, and neon cyan gradients',
+    'E.g., Create an ocean-inspired palette with deep sea blues, turquoise accents, and sandy beige tones',
+    'E.g., I need a warm coffee shop aesthetic with rich browns, cream, and burnt orange highlights',
+    'E.g., Design a midnight blue theme with silver metallic accents and soft purple shadows',
+    'E.g., A tropical paradise theme with bright turquoise, lime green, and coral pink for a travel app',
   ]
   const randomPlaceholder = examples[Math.floor(Math.random() * examples.length)]
 
