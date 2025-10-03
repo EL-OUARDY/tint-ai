@@ -12,7 +12,7 @@ function Header() {
         <SheetTrigger asChild>
           <PanelLeft className="text-muted-foreground hover:text-foreground z-10 size-5 cursor-pointer transition-colors duration-300" />
         </SheetTrigger>
-        <SheetContent side="left" className="w-[240px] !p-4">
+        <SheetContent side="left" className="w-[300px] !p-4">
           <SheetHeader>
             <SheetTitle className="font-title mt-8 text-xl">About</SheetTitle>
           </SheetHeader>
@@ -50,9 +50,9 @@ function Header() {
             <HistoryIcon className="z-10 size-5 cursor-pointer" />
           </div>
         </SheetTrigger>
-        <SheetContent side="right" className="w-[240px] !p-4">
+        <SheetContent side="right" className="w-[300px] !p-4">
           <SheetHeader>
-            <SheetTitle className="mt-8 text-xl">Hisory</SheetTitle>
+            <SheetTitle className="mt-8 text-xl">History</SheetTitle>
           </SheetHeader>
           <div className="text-muted-foreground mt-1 text-[0.76rem]">{/* Saved palettes */}</div>
         </SheetContent>

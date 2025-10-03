@@ -8,39 +8,77 @@ import {
   DrawerHeader,
   DrawerTrigger,
 } from './ui/drawer'
-import { Input } from './ui/input'
 import { useState } from 'react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip'
 import { EXT_LINK, REPO_LINK, TWITTER_LINK } from '@/shared/constants'
+import { useTheme } from '@/contexts/theme-provider'
+import Input from '@/components/ui/input'
 
 function Footer() {
   const [isLinkCopied, setIsLinkCopied] = useState<boolean>(false)
+  const { setTheme } = useTheme()
+
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.contains('dark')
+    if (isDark) setTheme('light')
+    else setTheme('dark')
+  }
+
   return (
-    <div className="text-muted-foreground flex items-center justify-center py-1">
+    <div className="text-muted-foreground flex items-center justify-center">
       <div className="flex-1 text-xs">
-        Version{' '}
-        <span className="hover:text-primary underline transition-colors duration-300">1.0.0</span>{' '}
-        &copy;
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button aria-label="Change theme" onClick={toggleTheme}>
+                <svg
+                  className="size-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+                  <path d="M12 3l0 18"></path>
+                  <path d="M12 9l4.65 -4.65"></path>
+                  <path d="M12 14.3l7.37 -7.37"></path>
+                  <path d="M12 19.6l8.85 -8.85"></path>
+                </svg>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Change theme</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
       <div className="flex items-center justify-center gap-4">
         <Drawer>
           <DrawerTrigger asChild>
-            <svg
-              className="hover:text-foreground size-5 cursor-pointer transition-colors duration-300"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeWidth="2"
-                d="M7.926 10.898 15 7.727m-7.074 5.39L15 16.29M8 12a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm12 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm0-11a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"
-              />
-            </svg>
+            <button aria-label="share extension">
+              <svg
+                className="hover:text-foreground size-5 cursor-pointer transition-colors duration-300"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeWidth="2"
+                  d="M7.926 10.898 15 7.727m-7.074 5.39L15 16.29M8 12a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm12 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm0-11a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"
+                />
+              </svg>
+            </button>
           </DrawerTrigger>
 
           <DrawerContent>
