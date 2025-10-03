@@ -18,13 +18,15 @@ function Footer() {
   return (
     <div className="text-muted-foreground flex items-center justify-center py-1">
       <div className="flex-1 text-xs">
-        Version <span className="hover:text-primary underline">1.0.0</span> &copy;
+        Version{' '}
+        <span className="hover:text-primary underline transition-colors duration-300">1.0.0</span>{' '}
+        &copy;
       </div>
       <div className="flex items-center justify-center gap-4">
         <Drawer>
           <DrawerTrigger asChild>
             <svg
-              className="hover:text-foreground size-5 cursor-pointer"
+              className="hover:text-foreground size-5 cursor-pointer transition-colors duration-300"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -77,14 +79,9 @@ function Footer() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <a
-                title="Report a bug"
-                href={REPO_LINK + '/issues'}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={REPO_LINK + '/issues'} target="_blank" rel="noopener noreferrer">
                 <svg
-                  className="hover:text-foreground size-5 cursor-pointer"
+                  className="hover:text-foreground size-5 cursor-pointer transition-colors duration-300"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -111,9 +108,9 @@ function Footer() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <a title="github repository" href={REPO_LINK} target="_blank">
+              <a href={REPO_LINK} target="_blank">
                 <svg
-                  className="hover:text-foreground size-5 cursor-pointer"
+                  className="hover:text-foreground size-5 cursor-pointer transition-colors duration-300"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -137,9 +134,9 @@ function Footer() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <a title="twitter" href={TWITTER_LINK} target="_blank" rel="noopener noreferrer">
+              <a href={TWITTER_LINK} target="_blank" rel="noopener noreferrer">
                 <svg
-                  className="hover:text-foreground size-[1.1rem] cursor-pointer"
+                  className="hover:text-foreground size-[1.1rem] cursor-pointer transition-colors duration-300"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"

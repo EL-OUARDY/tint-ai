@@ -10,7 +10,7 @@ function Header() {
     <div className="relative flex h-8 items-center rounded-md px-2">
       <Sheet>
         <SheetTrigger asChild>
-          <PanelLeft className="text-muted-foreground hover:text-foreground z-10 size-5 cursor-pointer" />
+          <PanelLeft className="text-muted-foreground hover:text-foreground z-10 size-5 cursor-pointer transition-colors duration-300" />
         </SheetTrigger>
         <SheetContent side="left" className="w-[240px] !p-4">
           <SheetHeader>
@@ -46,7 +46,7 @@ function Header() {
 
       <Sheet>
         <SheetTrigger asChild>
-          <div className="text-muted-foreground hover:text-foreground z-10 ml-auto flex">
+          <div className="text-muted-foreground hover:text-foreground z-10 ml-auto flex transition-colors duration-300">
             <HistoryIcon className="z-10 size-5 cursor-pointer" />
           </div>
         </SheetTrigger>

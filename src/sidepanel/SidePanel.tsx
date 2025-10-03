@@ -11,7 +11,7 @@ export const SidePanel = () => {
       <div className="bg-background p-2 pb-0">
         <Header />
       </div>
-      <div className="flex-1 p-2">
+      <div className="flex-1 overflow-hidden p-2">
         <Tabs defaultValue="themes" className="flex h-full flex-col">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="themes" className="!text-[0.8rem] font-bold uppercase">
@@ -52,13 +52,13 @@ export const SidePanel = () => {
               Export
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="themes" className="flex-1 border p-4">
+          <TabsContent value="themes" className="flex-1 border">
             <ColorsTab />
           </TabsContent>
-          <TabsContent value="customize" className="flex-1 border p-4">
+          <TabsContent value="customize" className="flex-1 border">
             <GenerateTab />
           </TabsContent>
-          <TabsContent value="contribute" className="flex-1 border p-4">
+          <TabsContent value="contribute" className="flex-1 border">
             <ExportTab />
           </TabsContent>
         </Tabs>
