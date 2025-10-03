@@ -16,7 +16,7 @@ import { EXT_LINK, REPO_LINK, TWITTER_LINK } from '@/shared/constants'
 function Footer() {
   const [isLinkCopied, setIsLinkCopied] = useState<boolean>(false)
   return (
-    <div className="text-muted-foreground flex items-center justify-center">
+    <div className="text-muted-foreground flex items-center justify-center py-1">
       <div className="flex-1 text-xs">
         Version <span className="hover:text-primary underline">1.0.0</span> &copy;
       </div>
@@ -27,8 +27,8 @@ function Footer() {
               className="hover:text-foreground size-5 cursor-pointer"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
+              width="16"
+              height="16"
               fill="none"
               viewBox="0 0 24 24"
             >
@@ -44,8 +44,8 @@ function Footer() {
           <DrawerContent>
             <div className="mx-auto w-full max-w-sm py-4">
               <DrawerHeader className="text-left">
-                <DrawerDescription className="text-muted-foreground">
-                  Share this link with your friends.
+                <DrawerDescription className="text-muted-foreground text-xl">
+                  Share link with your friends.
                 </DrawerDescription>
               </DrawerHeader>
 
@@ -77,13 +77,18 @@ function Footer() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <a href={REPO_LINK + '/issues'} target="_blank" rel="noopener noreferrer">
+              <a
+                title="Report a bug"
+                href={REPO_LINK + '/issues'}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <svg
                   className="hover:text-foreground size-5 cursor-pointer"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="16"
+                  height="16"
                   fill="none"
                   viewBox="0 0 24 24"
                 >
@@ -106,13 +111,13 @@ function Footer() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <a href={REPO_LINK} target="_blank">
+              <a title="github repository" href={REPO_LINK} target="_blank">
                 <svg
                   className="hover:text-foreground size-5 cursor-pointer"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="16"
+                  height="16"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -132,13 +137,13 @@ function Footer() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <a href={TWITTER_LINK} target="_blank" rel="noopener noreferrer">
+              <a title="twitter" href={TWITTER_LINK} target="_blank" rel="noopener noreferrer">
                 <svg
                   className="hover:text-foreground size-[1.1rem] cursor-pointer"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="16"
+                  height="16"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
