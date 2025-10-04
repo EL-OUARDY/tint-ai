@@ -1,5 +1,12 @@
 import { Github, LayersIcon, PanelLeft, Trash2 } from 'lucide-react'
-import { SheetTrigger, SheetContent, SheetHeader, SheetTitle, Sheet } from './ui/sheet'
+import {
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  Sheet,
+  SheetDescription,
+} from './ui/sheet'
 import { Separator } from './ui/separator'
 import { REPO_LINK } from '@/shared/constants'
 import { buttonVariants } from '@/components/ui/button'
@@ -28,6 +35,7 @@ function Header() {
         <SheetContent side="left" className="w-[300px] !p-4">
           <SheetHeader>
             <SheetTitle className="font-title mt-8 mb-2 text-xl">About</SheetTitle>
+            <SheetDescription className="sr-only">About extension</SheetDescription>
           </SheetHeader>
           <div className="text-muted-foreground mt-1 text-[0.76rem]">
             <p className="text-sm">
@@ -66,6 +74,7 @@ function Header() {
         <SheetContent side="right" className="flex h-screen max-h-screen w-[300px] flex-col !p-4">
           <SheetHeader>
             <SheetTitle className="mt-8 mb-2 text-xl">Saved Palettes</SheetTitle>
+            <SheetDescription className="sr-only">Saved Palettes</SheetDescription>
           </SheetHeader>
           <div className="flex-1 overflow-hidden">
             <ScrollArea className="size-full h-full">

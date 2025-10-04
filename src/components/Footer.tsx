@@ -6,6 +6,7 @@ import {
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
+  DrawerTitle,
   DrawerTrigger,
 } from './ui/drawer'
 import { useState } from 'react'
@@ -84,6 +85,7 @@ function Footer() {
           <DrawerContent>
             <div className="mx-auto w-full max-w-sm py-4">
               <DrawerHeader className="text-left">
+                <DrawerTitle className="sr-only">Share link with your friends.</DrawerTitle>
                 <DrawerDescription className="text-muted-foreground text-xl">
                   Share link with your friends.
                 </DrawerDescription>

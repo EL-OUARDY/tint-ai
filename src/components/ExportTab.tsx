@@ -16,32 +16,32 @@ function ExportTab() {
   const [scrollAreaHeight, setScrollAreaHeight] = useState<number>()
 
   const variables = [
-    { name: 'accent', value: '#25272c' },
-    { name: 'accent-foreground', value: '#fafafa' },
-    { name: 'background', value: '#09090b' },
-    { name: 'border', value: '#25272c' },
-    { name: 'card', value: '#09090b' },
-    { name: 'card-foreground', value: '#fafafa' },
-    { name: 'destructive', value: '#7f1d1d' },
-    { name: 'destructive-foreground', value: '#fafafa' },
-    { name: 'foreground', value: '#fafafa' },
-    { name: 'input', value: '#25272c' },
-    { name: 'muted', value: '#25272c' },
-    { name: 'muted-foreground', value: '#a1a1aa' },
-    { name: 'popover', value: '#09090b' },
-    { name: 'popover-foreground', value: '#fafafa' },
-    { name: 'primary', value: '#fafafa' },
-    { name: 'primary-foreground', value: '#18181b' },
-    { name: 'ring', value: '#d4d4d8' },
-    { name: 'secondary', value: '#25272c' },
-    { name: 'secondary-foreground', value: '#fafafa' },
+    { name: '--accent', value: '#FF0000' },
+    { name: '--accent-foreground', value: '#00FF00' },
+    { name: '--background', value: '#0000FF' },
+    { name: '--border', value: '#25272c' },
+    { name: '--card', value: '#09090b' },
+    { name: '--card-foreground', value: '#fafafa' },
+    { name: '--destructive', value: '#7f1d1d' },
+    { name: '--destructive-foreground', value: '#fafafa' },
+    { name: '--foreground', value: '#fafafa' },
+    { name: '--input', value: '#25272c' },
+    { name: '--muted', value: '#25272c' },
+    { name: '--muted-foreground', value: '#a1a1aa' },
+    { name: '--popover', value: '#09090b' },
+    { name: '--popover-foreground', value: '#fafafa' },
+    { name: '--primary', value: '#fafafa' },
+    { name: '--primary-foreground', value: '#18181b' },
+    { name: '--ring', value: '#d4d4d8' },
+    { name: '--secondary', value: '#25272c' },
+    { name: '--secondary-foreground', value: '#fafafa' },
   ]
 
   const code = [
     {
       language: 'css',
       filename: 'variables.css',
-      code: variables.map((color) => `--${color.name}: ${color.value};`).join('\n'),
+      code: variables.map((color) => `${color.name}: ${color.value};`).join('\n'),
     },
   ]
 
@@ -56,7 +56,7 @@ function ExportTab() {
   return (
     <div className="size-full max-h-full p-2" id="code-container">
       <ScrollArea style={{ height: scrollAreaHeight || 0 }} className="w-full">
-        <CodeBlock data={code} defaultValue={code[0].language} className="w-full">
+        <CodeBlock data={code} defaultValue={code[0].language} className="w-full select-text">
           <CodeBlockHeader className="py-2">
             <CodeBlockFiles>
               {(item) => (
