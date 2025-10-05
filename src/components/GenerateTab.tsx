@@ -85,6 +85,7 @@ function GenerateTab() {
             icon={<KeyRoundIcon className="size-4" />}
             value={apiKey}
             onChange={handleApiKeyChange}
+            className="placeholder:text-muted-foreground"
           />
           <small className="text-muted-foreground text-xs">
             Your API key will be securely stored in your browser (
