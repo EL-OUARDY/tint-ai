@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Input from '@/components/ui/input'
 import { ExternalLinkIcon, KeyRoundIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -6,24 +6,27 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import useStore from '@/hooks/useStore'
 
+const promptExamples = [
+  'E.g., A dark cyberpunk theme with neon purple and blue accents, perfect for a futuristic dashboard',
+  'E.g., Create a minimalist pastel color scheme with soft pinks and blues for a calming productivity app',
+  'E.g., I want vibrant sunset colors with warm oranges, deep purples, and golden yellows for a creative portfolio',
+  'E.g., Design a professional dark theme with navy blue highlights and crisp white text for a corporate website',
+  'E.g., Give me nature-inspired colors with forest greens, earthy browns, and sky blue accents',
+  'E.g., A retro 80s inspired theme with hot pink, electric purple, and neon cyan gradients',
+  'E.g., Create an ocean-inspired palette with deep sea blues, turquoise accents, and sandy beige tones',
+  'E.g., I need a warm coffee shop aesthetic with rich browns, cream, and burnt orange highlights',
+  'E.g., Design a midnight blue theme with silver metallic accents and soft purple shadows',
+  'E.g., A tropical paradise theme with bright turquoise, lime green, and coral pink for a travel app',
+]
+
 function GenerateTab() {
   const { colorVariables } = useStore()
   const [prompt, setPrompt] = useState('')
   const [apiKey, setApiKey] = useState('')
 
-  const examples = [
-    'E.g., A dark cyberpunk theme with neon purple and blue accents, perfect for a futuristic dashboard',
-    'E.g., Create a minimalist pastel color scheme with soft pinks and blues for a calming productivity app',
-    'E.g., I want vibrant sunset colors with warm oranges, deep purples, and golden yellows for a creative portfolio',
-    'E.g., Design a professional dark theme with navy blue highlights and crisp white text for a corporate website',
-    'E.g., Give me nature-inspired colors with forest greens, earthy browns, and sky blue accents',
-    'E.g., A retro 80s inspired theme with hot pink, electric purple, and neon cyan gradients',
-    'E.g., Create an ocean-inspired palette with deep sea blues, turquoise accents, and sandy beige tones',
-    'E.g., I need a warm coffee shop aesthetic with rich browns, cream, and burnt orange highlights',
-    'E.g., Design a midnight blue theme with silver metallic accents and soft purple shadows',
-    'E.g., A tropical paradise theme with bright turquoise, lime green, and coral pink for a travel app',
-  ]
-  const randomPlaceholder = examples[Math.floor(Math.random() * examples.length)]
+  const randomPlaceholder = useRef<string>(
+    promptExamples[Math.floor(Math.random() * promptExamples.length)],
+  )
 
   // Load API key from chrome storage when component mounts
   useEffect(() => {
@@ -59,7 +62,7 @@ function GenerateTab() {
           <Textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder={randomPlaceholder}
+            placeholder={randomPlaceholder.current}
             id="prompt"
             className="flex-1"
           />
