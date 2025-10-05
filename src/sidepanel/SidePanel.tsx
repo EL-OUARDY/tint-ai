@@ -8,7 +8,7 @@ import useStore from '@/hooks/useStore'
 import { useEffect } from 'react'
 
 export const SidePanel = () => {
-  const { colorVariables, setColorVariables } = useStore()
+  const { colorVariables, setColorVariables, excludedVariables } = useStore()
 
   // Load CSS variables from the current page
   useEffect(() => {
@@ -78,6 +78,23 @@ export const SidePanel = () => {
 
     loadCSSVariables()
   }, [])
+
+  // Save Excluded Variables in chrome storage
+  useEffect(() => {
+    const saveExcludedVariables = async () => {
+      try {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+        if (tab?.url) {
+          const key = tab.url
+          localStorage.setItem(key, JSON.stringify(excludedVariables))
+        }
+      } catch (error) {
+        console.error('Error getting current tab URL:', error)
+      }
+    }
+
+    saveExcludedVariables()
+  }, [excludedVariables])
 
   return (
     <main className="flex h-screen flex-col">

@@ -12,9 +12,16 @@ import { HexAlphaColorPicker } from 'react-colorful'
 import { COLOR_VARIABLE } from '@/shared/models'
 import { Button } from '@/components/ui/button'
 import useStore from '@/hooks/useStore'
+import { XIcon } from 'lucide-react'
 
 function ColorsTab() {
-  const { colorVariables, setColorVariables } = useStore()
+  const {
+    colorVariables,
+    getFilteredColorVariables,
+    setColorVariables,
+    excludedVariables,
+    setExcludedVariables,
+  } = useStore()
   const [selectedColor, setSelectedColor] = useState<COLOR_VARIABLE | null>(null)
   const [scrollAreaHeight, setScrollAreaHeight] = useState<number>()
 
@@ -36,8 +43,9 @@ function ColorsTab() {
               <div className="mx-auto w-full max-w-sm py-4">
                 <DrawerHeader className="text-left">
                   <DrawerTitle className="sr-only">Pick a color.</DrawerTitle>
-                  <DrawerDescription className="text-muted-foreground text-base tracking-wider">
-                    {selectedColor?.name}:{selectedColor?.value}
+                  <DrawerDescription className="text-muted-foreground flex flex-col gap-1 text-base tracking-wider select-text">
+                    <span>{selectedColor?.name}</span>
+                    <span className="text-foreground">{selectedColor?.value}</span>
                   </DrawerDescription>
                 </DrawerHeader>
 
@@ -49,7 +57,7 @@ function ColorsTab() {
                         onChange={(newColor) => {
                           setSelectedColor({ ...selectedColor, value: newColor })
                           setColorVariables(
-                            colorVariables.map((c) =>
+                            getFilteredColorVariables().map((c) =>
                               c.name === selectedColor.name ? { ...c, value: newColor } : c,
                             ),
                           )
@@ -74,14 +82,27 @@ function ColorsTab() {
             </DrawerContent>
           </Drawer>
           {/* Colors list */}
-          {colorVariables.map((colorVar, index) => (
+          {getFilteredColorVariables().map((colorVar, index) => (
             <div
               onClick={() => setSelectedColor(colorVar)}
               key={index}
               className="color hover:bg-muted mb-1 flex items-center justify-between border px-4 py-2 text-sm"
             >
-              <div className="">
-                {colorVar.name} --- {colorVar.value}
+              <div className="flex flex-col gap-1 pr-2">
+                <span className="">{colorVar.name}</span>
+                <div className="text-muted-foreground flex items-center gap-1 text-xs">
+                  <span>{colorVar.value}</span>
+                  <span>|</span>
+                  <button
+                    onClick={(e) => {
+                      setExcludedVariables([...excludedVariables, colorVar.name])
+                      e.stopPropagation()
+                    }}
+                    className="text-foreground cursor-pointer hover:underline"
+                  >
+                    Exclude
+                  </button>
+                </div>
               </div>
               <div
                 className="size-5 cursor-pointer border"
@@ -91,6 +112,32 @@ function ColorsTab() {
               ></div>
             </div>
           ))}
+
+          {/* Excluded List */}
+          {excludedVariables.length > 0 && (
+            <div className="my-4 w-full">
+              <h3 className="font-title mb-4 text-center text-base">
+                Excluded Variables <span>({excludedVariables.length})</span>
+              </h3>
+              {excludedVariables.map((variable, index) => (
+                <div
+                  className="variable mb-2 flex h-10 items-center justify-between border px-4 py-2 text-sm"
+                  key={index}
+                >
+                  <span>{variable}</span>
+                  <button
+                    onClick={() =>
+                      setExcludedVariables(excludedVariables.filter((x) => x !== variable))
+                    }
+                    title="delete"
+                    className="hover:bg-muted hover:text-foreground text-muted-foreground flex size-6 items-center justify-center border"
+                  >
+                    <XIcon className="size-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </ScrollArea>
       )}
       {/* Empty list */}

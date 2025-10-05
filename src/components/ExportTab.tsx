@@ -16,15 +16,16 @@ import { BundledLanguage } from 'shiki'
 function ExportTab() {
   const [scrollAreaHeight, setScrollAreaHeight] = useState<number>()
 
-  const { colorVariables } = useStore()
+  const { getFilteredColorVariables } = useStore()
 
   const code = [
     {
       language: 'css',
       filename: 'variables.css',
       code:
-        colorVariables.map((color) => `${color.name}: ${color.value};`).join('\n') ||
-        '// Silence is golden',
+        getFilteredColorVariables()
+          .map((color) => `${color.name}: ${color.value};`)
+          .join('\n') || '// Silence is golden',
     },
   ]
 
