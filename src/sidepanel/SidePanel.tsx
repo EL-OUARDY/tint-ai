@@ -8,31 +8,75 @@ import useStore from '@/hooks/useStore'
 import { useEffect } from 'react'
 
 export const SidePanel = () => {
-  const { setColorVariables } = useStore()
+  const { colorVariables, setColorVariables } = useStore()
 
-  // DEMO data
+  // Load CSS variables from the current page
   useEffect(() => {
-    setColorVariables([
-      { name: '--accent', value: '#FF0000' },
-      { name: '--accent-foreground', value: '#00FF00' },
-      { name: '--background', value: '#0000FF' },
-      { name: '--border', value: '#25272c' },
-      { name: '--card', value: '#09090b' },
-      { name: '--card-foreground', value: '#fafafa' },
-      { name: '--destructive', value: '#7f1d1d' },
-      { name: '--destructive-foreground', value: '#fafafa' },
-      { name: '--foreground', value: '#fafafa' },
-      { name: '--input', value: '#25272c' },
-      { name: '--muted', value: '#25272c' },
-      { name: '--muted-foreground', value: '#a1a1aa' },
-      { name: '--popover', value: '#09090b' },
-      { name: '--popover-foreground', value: '#fafafa' },
-      { name: '--primary', value: '#fafafa' },
-      { name: '--primary-foreground', value: '#18181b' },
-      { name: '--ring', value: '#d4d4d8' },
-      { name: '--secondary', value: '#25272c' },
-      { name: '--secondary-foreground', value: '#fafafa' },
-    ])
+    const loadCSSVariables = async () => {
+      try {
+        // Get the active tab
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+
+        if (!tab?.id) {
+          console.error('No active tab found')
+          return
+        }
+
+        // Check if we can access the tab (not a chrome:// or extension page)
+        if (tab.url?.startsWith('chrome://') || tab.url?.startsWith('chrome-extension://')) {
+          console.log('Cannot access CSS variables on Chrome internal pages')
+          setColorVariables([])
+          return
+        }
+
+        try {
+          // Send message to content script to get CSS variables
+          const response = await chrome.tabs.sendMessage(tab.id, { action: 'getCSSVariables' })
+
+          if (response?.variables && response.variables.length > 0) {
+            console.log('Loaded CSS variables:', response.variables)
+            setColorVariables(response.variables)
+          } else {
+            console.log('No CSS variables found on the page')
+            setColorVariables([])
+          }
+        } catch (messageError) {
+          console.error('Error sending message to content script:', messageError)
+          // Content script might not be injected, try to inject it
+          try {
+            await chrome.scripting.executeScript({
+              target: { tabId: tab.id! },
+              files: ['src/contentScript/index.ts.js'],
+            })
+            // Wait a bit for the script to load
+            setTimeout(async () => {
+              try {
+                const response = await chrome.tabs.sendMessage(tab.id!, {
+                  action: 'getCSSVariables',
+                })
+                if (response?.variables && response.variables.length > 0) {
+                  console.log('Loaded CSS variables after injection:', response.variables)
+                  setColorVariables(response.variables)
+                } else {
+                  setColorVariables([])
+                }
+              } catch (retryError) {
+                console.error('Failed to load CSS variables after injection:', retryError)
+                setColorVariables([])
+              }
+            }, 100)
+          } catch (injectionError) {
+            console.error('Failed to inject content script:', injectionError)
+            setColorVariables([])
+          }
+        }
+      } catch (error) {
+        console.error('Error loading CSS variables:', error)
+        setColorVariables([])
+      }
+    }
+
+    loadCSSVariables()
   }, [])
 
   return (
@@ -43,8 +87,14 @@ export const SidePanel = () => {
       <div className="flex-1 overflow-hidden p-2">
         <Tabs defaultValue="themes" className="flex h-full flex-col">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="themes" className="!text-[0.8rem] font-bold uppercase">
-              Colors
+            <TabsTrigger
+              value="themes"
+              className="flex items-center gap-1 !text-[0.8rem] font-bold uppercase"
+            >
+              <span>Colors</span>
+              {colorVariables.length > 0 && (
+                <span className="font-normal">({colorVariables.length})</span>
+              )}
             </TabsTrigger>
             <TabsTrigger
               value="customize"

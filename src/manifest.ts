@@ -31,6 +31,7 @@ export default defineManifest({
     {
       matches: ['http://*/*', 'https://*/*'],
       js: ['src/contentScript/index.ts'],
+      run_at: 'document_idle',
     },
   ],
   side_panel: {
@@ -47,5 +48,5 @@ export default defineManifest({
       matches: [],
     },
   ],
-  permissions: ['sidePanel', 'storage', 'tabs'],
+  permissions: ['sidePanel', 'storage', 'tabs', 'scripting', 'activeTab'],
 })
