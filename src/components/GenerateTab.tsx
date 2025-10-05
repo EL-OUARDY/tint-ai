@@ -4,8 +4,11 @@ import { ExternalLinkIcon, KeyRoundIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import useStore from '@/hooks/useStore'
 
 function GenerateTab() {
+  const { colorVariables } = useStore()
+  const [prompt, setPrompt] = useState('')
   const [apiKey, setApiKey] = useState('')
 
   const examples = [
@@ -41,12 +44,25 @@ function GenerateTab() {
     })
   }
 
+  function generate() {
+    if (colorVariables.length === 0) {
+      alert('No CSS color variables were detected on this page.')
+      return
+    }
+  }
+
   return (
     <div className="size-full max-h-full p-4">
       <div className="flex h-full flex-col gap-4">
         <div className="flex w-full flex-1 flex-col gap-3">
           <Label htmlFor="message">Prompt</Label>
-          <Textarea placeholder={randomPlaceholder} id="prompt" className="flex-1" />
+          <Textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder={randomPlaceholder}
+            id="prompt"
+            className="flex-1"
+          />
         </div>
 
         <div className="mb-4 grid w-full gap-3">
@@ -78,7 +94,7 @@ function GenerateTab() {
           <Button variant={'outline'} className="">
             Save
           </Button>
-          <Button variant={'default'} className="">
+          <Button variant={'default'} onClick={generate} disabled={prompt && apiKey ? false : true}>
             Generate
           </Button>
         </div>

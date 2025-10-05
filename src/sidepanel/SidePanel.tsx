@@ -4,8 +4,37 @@ import Footer from '@/components/Footer'
 import GenerateTab from '@/components/GenerateTab'
 import Header from '@/components/Header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import useStore from '@/hooks/useStore'
+import { useEffect } from 'react'
 
 export const SidePanel = () => {
+  const { setColorVariables } = useStore()
+
+  // DEMO data
+  useEffect(() => {
+    setColorVariables([
+      { name: '--accent', value: '#FF0000' },
+      { name: '--accent-foreground', value: '#00FF00' },
+      { name: '--background', value: '#0000FF' },
+      { name: '--border', value: '#25272c' },
+      { name: '--card', value: '#09090b' },
+      { name: '--card-foreground', value: '#fafafa' },
+      { name: '--destructive', value: '#7f1d1d' },
+      { name: '--destructive-foreground', value: '#fafafa' },
+      { name: '--foreground', value: '#fafafa' },
+      { name: '--input', value: '#25272c' },
+      { name: '--muted', value: '#25272c' },
+      { name: '--muted-foreground', value: '#a1a1aa' },
+      { name: '--popover', value: '#09090b' },
+      { name: '--popover-foreground', value: '#fafafa' },
+      { name: '--primary', value: '#fafafa' },
+      { name: '--primary-foreground', value: '#18181b' },
+      { name: '--ring', value: '#d4d4d8' },
+      { name: '--secondary', value: '#25272c' },
+      { name: '--secondary-foreground', value: '#fafafa' },
+    ])
+  }, [])
+
   return (
     <main className="flex h-screen flex-col">
       <div className="bg-background p-2 pb-0">

@@ -9,39 +9,22 @@ import {
   CodeBlockFiles,
   CodeBlockHeader,
 } from '@/components/ui/shadcn-io/code-block'
+import useStore from '@/hooks/useStore'
 import { useEffect, useState } from 'react'
 import { BundledLanguage } from 'shiki'
 
 function ExportTab() {
   const [scrollAreaHeight, setScrollAreaHeight] = useState<number>()
 
-  const variables = [
-    { name: '--accent', value: '#FF0000' },
-    { name: '--accent-foreground', value: '#00FF00' },
-    { name: '--background', value: '#0000FF' },
-    { name: '--border', value: '#25272c' },
-    { name: '--card', value: '#09090b' },
-    { name: '--card-foreground', value: '#fafafa' },
-    { name: '--destructive', value: '#7f1d1d' },
-    { name: '--destructive-foreground', value: '#fafafa' },
-    { name: '--foreground', value: '#fafafa' },
-    { name: '--input', value: '#25272c' },
-    { name: '--muted', value: '#25272c' },
-    { name: '--muted-foreground', value: '#a1a1aa' },
-    { name: '--popover', value: '#09090b' },
-    { name: '--popover-foreground', value: '#fafafa' },
-    { name: '--primary', value: '#fafafa' },
-    { name: '--primary-foreground', value: '#18181b' },
-    { name: '--ring', value: '#d4d4d8' },
-    { name: '--secondary', value: '#25272c' },
-    { name: '--secondary-foreground', value: '#fafafa' },
-  ]
+  const { colorVariables } = useStore()
 
   const code = [
     {
       language: 'css',
       filename: 'variables.css',
-      code: variables.map((color) => `${color.name}: ${color.value};`).join('\n'),
+      code:
+        colorVariables.map((color) => `${color.name}: ${color.value};`).join('\n') ||
+        '// Silence is golden',
     },
   ]
 
