@@ -178,3 +178,9 @@ a {
   width: 22px !important;
   height: 22px !important;
 }
+
+
+/* CodeBlock */
+#code-container span.line {
+  overflow: hidden !important;
+}
