@@ -57,7 +57,7 @@ function ColorsTab() {
                         onChange={(newColor) => {
                           setSelectedColor({ ...selectedColor, value: newColor })
                           setColorVariables(
-                            getFilteredColorVariables().map((c) =>
+                            colorVariables.map((c) =>
                               c.name === selectedColor.name ? { ...c, value: newColor } : c,
                             ),
                           )

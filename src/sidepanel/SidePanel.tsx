@@ -10,7 +10,14 @@ import { loadCSSVariables } from '@/lib/utils'
 import { useEffect } from 'react'
 
 export const SidePanel = () => {
-  const { colorVariables, setColorVariables, excludedVariables, setExcludedVariables } = useStore()
+  const {
+    colorVariables,
+    setColorVariables,
+    excludedVariables,
+    setExcludedVariables,
+    tabURL,
+    setTabURL,
+  } = useStore()
 
   // Load CSS variables from the current page
   useEffect(() => {
@@ -46,6 +53,13 @@ export const SidePanel = () => {
       try {
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
         if (!isMounted || !tab) return
+
+        // Set tab url
+        if (tab.url) setTabURL(tab.url)
+
+        // Clear old page variables
+        setColorVariables([])
+        setExcludedVariables([])
 
         // Load excluded variables for the current tab (stored by URL)
         if (tab.url) {
@@ -118,6 +132,50 @@ export const SidePanel = () => {
     }
   }, [setColorVariables, setExcludedVariables])
 
+  // Apply CSS variables to the current page when colorVariables change (skip excluded)
+  useEffect(() => {
+    const applyVariablesToPage = async () => {
+      try {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+
+        if (!tab?.id) return
+
+        // Don't modify internal chrome/extension pages
+        if (tab.url?.startsWith('chrome://') || tab.url?.startsWith('chrome-extension://')) {
+          return
+        }
+
+        const payload = {
+          action: 'applyCSSVariables',
+          variables: colorVariables,
+          excluded: excludedVariables,
+        }
+
+        try {
+          // Try to send message to content script
+          await chrome.tabs.sendMessage(tab.id, payload)
+        } catch (sendError) {
+          // If content script is not injected, try to inject and retry
+          try {
+            await chrome.scripting.executeScript({
+              target: { tabId: tab.id! },
+              files: ['src/contentScript/index.ts.js'],
+            })
+            // Retry after injection
+            await chrome.tabs.sendMessage(tab.id, payload)
+          } catch (injectionError) {
+            console.error('Failed to apply CSS variables after injection:', injectionError)
+          }
+        }
+      } catch (error) {
+        console.error('Error applying CSS variables to page:', error)
+      }
+    }
+
+    // Only run when there are color variables (or when they became empty)
+    applyVariablesToPage()
+  }, [colorVariables, excludedVariables])
+
   return (
     <main className="flex h-screen flex-col">
       <div className="bg-background p-2 pb-0">
@@ -147,13 +205,13 @@ export const SidePanel = () => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="themes" className="flex-1 border">
-            <ColorsTab />
+            <ColorsTab key={tabURL} />
           </TabsContent>
           <TabsContent value="customize" className="flex-1 border">
-            <GenerateTab />
+            <GenerateTab key={tabURL} />
           </TabsContent>
           <TabsContent value="contribute" className="flex-1 border">
-            <ExportTab />
+            <ExportTab key={tabURL} />
           </TabsContent>
         </Tabs>
       </div>

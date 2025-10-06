@@ -2,16 +2,20 @@ import { create } from 'zustand'
 import { COLOR_VARIABLE } from '@/shared/models'
 
 interface IState {
+  tabURL: string
   colorVariables: COLOR_VARIABLE[]
   excludedVariables: string[]
+  setTabURL: (url: string) => void
   setColorVariables: (colors: COLOR_VARIABLE[]) => void
   setExcludedVariables: (excluded: string[]) => void
   getFilteredColorVariables: () => COLOR_VARIABLE[]
 }
 
 const useStore = create<IState>((set, get) => ({
+  tabURL: '',
   colorVariables: [],
   excludedVariables: [],
+  setTabURL: (url: string) => set({ tabURL: url }),
   setColorVariables: (colors: COLOR_VARIABLE[]) => set({ colorVariables: colors }),
   setExcludedVariables: (excluded: string[]) => set({ excludedVariables: excluded }),
   getFilteredColorVariables: () => {
