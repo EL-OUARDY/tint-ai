@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import useStore from '@/hooks/useStore'
+import GeminiService from '@/services/gemini'
 
 const promptExamples = [
   'E.g., A dark cyberpunk theme with neon purple and blue accents, perfect for a futuristic dashboard',
@@ -20,7 +21,7 @@ const promptExamples = [
 ]
 
 function GenerateTab() {
-  const { colorVariables } = useStore()
+  const { colorVariables, getFilteredColorVariables } = useStore()
   const [prompt, setPrompt] = useState('')
   const [apiKey, setApiKey] = useState('')
 
@@ -52,6 +53,9 @@ function GenerateTab() {
       alert('No CSS color variables were detected on this page.')
       return
     }
+
+    const result = GeminiService.generatePalette(getFilteredColorVariables(), '', apiKey)
+    if (!result) alert('Something went wrong. Please verify your API key and try again.')
   }
 
   return (
