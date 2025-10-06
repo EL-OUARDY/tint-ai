@@ -40,7 +40,7 @@ function Header() {
     <div className="relative flex h-8 items-center rounded-md px-2">
       <Sheet>
         <SheetTrigger asChild>
-          <PanelLeft className="text-muted-foreground hover:text-foreground z-10 size-5 cursor-pointer transition-colors duration-300" />
+          <PanelLeft className="text-muted-foreground hover:text-foreground z-10 size-[1.2rem] cursor-pointer transition-colors duration-300" />
         </SheetTrigger>
         <SheetContent side="left" className="w-[300px] !p-4">
           <SheetHeader>
@@ -71,7 +71,7 @@ function Header() {
               </a>
             </div>
           </div>
-          <img className="absolute bottom-4 left-4 size-5" src="./logo.svg" alt="logo" />
+          <img className="absolute bottom-4 left-4 size-6" src="./logo.svg" alt="logo" />
         </SheetContent>
       </Sheet>
 
@@ -80,7 +80,7 @@ function Header() {
           <Tooltip>
             <TooltipTrigger asChild>
               <button onClick={loadVars} aria-label="Refresh" type="button">
-                <RefreshCcwIcon className="text-muted-foreground hover:text-foreground z-10 size-5 cursor-pointer transition-colors duration-300" />
+                <RefreshCcwIcon className="text-muted-foreground hover:text-foreground z-10 size-[1.2rem] cursor-pointer transition-colors duration-300" />
               </button>
             </TooltipTrigger>
             <TooltipContent>
@@ -91,7 +91,7 @@ function Header() {
 
         <Sheet>
           <SheetTrigger asChild>
-            <LayersIcon className="text-muted-foreground hover:text-foreground z-10 size-5 cursor-pointer transition-colors duration-300" />
+            <LayersIcon className="text-muted-foreground hover:text-foreground z-10 size-[1.2rem] cursor-pointer transition-colors duration-300" />
           </SheetTrigger>
           <SheetContent side="right" className="flex h-screen max-h-screen w-[300px] flex-col !p-4">
             <SheetHeader>
