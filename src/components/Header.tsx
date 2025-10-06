@@ -1,4 +1,4 @@
-import { Github, LayersIcon, PanelLeft, Trash2 } from 'lucide-react'
+import { Github, LayersIcon, PanelLeft, RefreshCcwIcon, Trash2 } from 'lucide-react'
 import {
   SheetTrigger,
   SheetContent,
@@ -11,8 +11,13 @@ import { Separator } from './ui/separator'
 import { REPO_LINK } from '@/shared/constants'
 import { buttonVariants } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import useStore from '@/hooks/useStore'
+import { loadCSSVariables } from '@/lib/utils'
 
 function Header() {
+  const { setColorVariables } = useStore()
+
   const palettes = [
     'Dracula',
     'Solarized Dark',
@@ -25,6 +30,11 @@ function Header() {
     'Palenight',
     'Midnight Coder',
   ]
+
+  async function loadVars() {
+    const vars = await loadCSSVariables()
+    setColorVariables(vars || [])
+  }
 
   return (
     <div className="relative flex h-8 items-center rounded-md px-2">
@@ -65,41 +75,54 @@ function Header() {
         </SheetContent>
       </Sheet>
 
-      <Sheet>
-        <SheetTrigger asChild>
-          <div className="text-muted-foreground hover:text-foreground z-10 ml-auto flex transition-colors duration-300">
-            <LayersIcon className="z-10 size-5 cursor-pointer" />
-          </div>
-        </SheetTrigger>
-        <SheetContent side="right" className="flex h-screen max-h-screen w-[300px] flex-col !p-4">
-          <SheetHeader>
-            <SheetTitle className="mt-8 mb-2 text-xl">Saved Palettes</SheetTitle>
-            <SheetDescription className="sr-only">Saved Palettes</SheetDescription>
-          </SheetHeader>
-          <div className="flex-1 overflow-hidden">
-            <ScrollArea className="size-full h-full">
-              {palettes.map((palette, index) => (
-                <div key={index} className="color mb-1 flex h-10 items-center gap-1 text-sm">
-                  <div
-                    onClick={() => alert('load palette')}
-                    className="hover:bg-muted flex h-full flex-1 cursor-pointer items-center border px-4"
-                  >
-                    {palette}
+      <div className="z-10 ml-auto flex gap-3">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button onClick={loadVars} aria-label="Refresh" type="button">
+                <RefreshCcwIcon className="text-muted-foreground hover:text-foreground z-10 size-5 cursor-pointer transition-colors duration-300" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Refresh</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <Sheet>
+          <SheetTrigger asChild>
+            <LayersIcon className="text-muted-foreground hover:text-foreground z-10 size-5 cursor-pointer transition-colors duration-300" />
+          </SheetTrigger>
+          <SheetContent side="right" className="flex h-screen max-h-screen w-[300px] flex-col !p-4">
+            <SheetHeader>
+              <SheetTitle className="mt-8 mb-2 text-xl">Saved Palettes</SheetTitle>
+              <SheetDescription className="sr-only">Saved Palettes</SheetDescription>
+            </SheetHeader>
+            <div className="flex-1 overflow-hidden">
+              <ScrollArea className="size-full h-full">
+                {palettes.map((palette, index) => (
+                  <div key={index} className="color mb-1 flex h-10 items-center gap-1 text-sm">
+                    <div
+                      onClick={() => alert('load palette')}
+                      className="hover:bg-muted flex h-full flex-1 cursor-pointer items-center border px-4"
+                    >
+                      {palette}
+                    </div>
+                    <button
+                      onClick={() => alert('delete palette')}
+                      title="Delete palette"
+                      tabIndex={-1}
+                      className="hover:bg-muted text-muted-foreground flex size-10 cursor-pointer items-center justify-center border hover:text-red-500"
+                    >
+                      <Trash2 className="z-10 size-4 cursor-pointer transition-colors duration-300" />
+                    </button>
                   </div>
-                  <button
-                    onClick={() => alert('delete palette')}
-                    title="Delete palette"
-                    tabIndex={-1}
-                    className="hover:bg-muted text-muted-foreground flex size-10 cursor-pointer items-center justify-center border hover:text-red-500"
-                  >
-                    <Trash2 className="z-10 size-4 cursor-pointer transition-colors duration-300" />
-                  </button>
-                </div>
-              ))}
-            </ScrollArea>
-          </div>
-        </SheetContent>
-      </Sheet>
+                ))}
+              </ScrollArea>
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
     </div>
   )
 }
