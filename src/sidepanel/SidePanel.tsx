@@ -10,7 +10,7 @@ import { loadCSSVariables } from '@/lib/utils'
 import { useEffect } from 'react'
 
 export const SidePanel = () => {
-  const { colorVariables, setColorVariables, excludedVariables } = useStore()
+  const { colorVariables, setColorVariables, excludedVariables, setExcludedVariables } = useStore()
 
   // Load CSS variables from the current page
   useEffect(() => {
@@ -37,6 +37,86 @@ export const SidePanel = () => {
 
     saveExcludedVariables()
   }, [excludedVariables])
+
+  // Reload CSS variables when user switches tabs or navigates to another page
+  useEffect(() => {
+    let isMounted = true
+
+    const refreshForActiveTab = async () => {
+      try {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+        if (!isMounted || !tab) return
+
+        // Load excluded variables for the current tab (stored by URL)
+        if (tab.url) {
+          try {
+            const stored = localStorage.getItem(tab.url)
+            if (stored) {
+              setExcludedVariables(JSON.parse(stored))
+            } else {
+              // clear if nothing stored for this URL
+              setExcludedVariables([])
+            }
+          } catch (e) {
+            console.error('Failed to load excluded variables for tab:', e)
+          }
+        }
+
+        // Reload CSS variables from the page
+        const vars = await loadCSSVariables()
+        if (isMounted) setColorVariables(vars || [])
+      } catch (error) {
+        console.error('Error refreshing variables on tab change:', error)
+      }
+    }
+
+    // Handlers must be stable references so we can remove them on cleanup
+    const onActivated = () => {
+      refreshForActiveTab()
+    }
+
+    const onUpdated = (_tabId: number, changeInfo: any, tab: chrome.tabs.Tab) => {
+      // React to URL changes or when the tab finishes loading
+      if (changeInfo.status === 'complete' || changeInfo.url) {
+        refreshForActiveTab()
+      }
+    }
+
+    const onWindowFocusChanged = (_windowId: number) => {
+      // When window focus changes, the active tab may have changed
+      refreshForActiveTab()
+    }
+
+    try {
+      chrome.tabs.onActivated.addListener(onActivated)
+      chrome.tabs.onUpdated.addListener(onUpdated)
+      chrome.windows.onFocusChanged?.addListener(onWindowFocusChanged)
+    } catch (err) {
+      console.warn('Could not register chrome tab listeners in sidepanel:', err)
+    }
+
+    // Run once to initialize (in case active tab changed since mount)
+    refreshForActiveTab()
+
+    return () => {
+      isMounted = false
+      try {
+        chrome.tabs.onActivated.removeListener(onActivated)
+      } catch (e) {
+        /* ignore */
+      }
+      try {
+        chrome.tabs.onUpdated.removeListener(onUpdated)
+      } catch (e) {
+        /* ignore */
+      }
+      try {
+        chrome.windows.onFocusChanged?.removeListener(onWindowFocusChanged)
+      } catch (e) {
+        /* ignore */
+      }
+    }
+  }, [setColorVariables, setExcludedVariables])
 
   return (
     <main className="flex h-screen flex-col">
