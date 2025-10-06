@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import useStore from '@/hooks/useStore'
 import {
   Drawer,
@@ -12,6 +12,7 @@ import { HexAlphaColorPicker } from 'react-colorful'
 import { COLOR_VARIABLE } from '@/shared/models'
 import { Button } from '@/components/ui/button'
 import { XIcon } from 'lucide-react'
+import Input from '@/components/ui/input'
 
 interface Props {
   showExcludedColors?: boolean
@@ -25,8 +26,8 @@ function ColorsManager({ showExcludedColors = true }: Props) {
     excludedVariables,
     setExcludedVariables,
   } = useStore()
-  const [scrollAreaHeight, setScrollAreaHeight] = useState<number>()
   const [selectedColor, setSelectedColor] = useState<COLOR_VARIABLE | null>(null)
+  const colorInput = useRef<HTMLInputElement>(null)
 
   return (
     <>
@@ -38,7 +39,21 @@ function ColorsManager({ showExcludedColors = true }: Props) {
               <DrawerTitle className="sr-only">Pick a color.</DrawerTitle>
               <DrawerDescription className="text-muted-foreground flex flex-col gap-1 text-base tracking-wider select-text">
                 <span>{selectedColor?.name}</span>
-                <span className="text-foreground">{selectedColor?.value}</span>
+                <Input
+                  ref={colorInput}
+                  value={selectedColor?.value}
+                  onChange={(e) => {
+                    if (selectedColor) {
+                      setSelectedColor({ ...selectedColor, value: e.target.value })
+                      setColorVariables(
+                        colorVariables.map((c) =>
+                          c.name === selectedColor.name ? { ...c, value: e.target.value } : c,
+                        ),
+                      )
+                    }
+                  }}
+                  className="text-foreground mx-auto w-3/4 text-center text-sm"
+                />
               </DrawerDescription>
             </DrawerHeader>
 
@@ -94,6 +109,20 @@ function ColorsManager({ showExcludedColors = true }: Props) {
                 className="text-foreground cursor-pointer hover:underline"
               >
                 Exclude
+              </button>
+              <span>|</span>
+              <button
+                onClick={(e) => {
+                  setColorVariables(
+                    colorVariables.map((c) =>
+                      c.name === colorVar.name ? { ...c, value: c.initial } : c,
+                    ),
+                  )
+                  e.stopPropagation()
+                }}
+                className="text-foreground cursor-pointer hover:underline"
+              >
+                Reset
               </button>
             </div>
           </div>

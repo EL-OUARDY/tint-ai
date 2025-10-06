@@ -20,6 +20,7 @@ function extractCSSVariables(): COLOR_VARIABLE[] {
         cssVariables.push({
           name: propertyName,
           value: propertyValue.toString(),
+          initial: propertyValue.toString(),
         })
       }
     })
@@ -36,6 +37,7 @@ function extractCSSVariables(): COLOR_VARIABLE[] {
         cssVariables.push({
           name: propertyName,
           value: propertyValue,
+          initial: propertyValue,
         })
       }
     }
