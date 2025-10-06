@@ -122,9 +122,18 @@ function ColorsTab() {
           {/* Excluded List */}
           {excludedVariables.length > 0 && (
             <div className="my-4 w-full">
-              <h3 className="font-title mb-4 text-center text-base">
-                Excluded Variables <span>({excludedVariables.length})</span>
-              </h3>
+              <div className="mb-4 flex items-center justify-between px-4">
+                <h3 className="font-title text-center text-base">
+                  Excluded Variables <span>({excludedVariables.length})</span>
+                </h3>
+                <span
+                  onClick={() => setExcludedVariables([])}
+                  title="Clear excluded variables"
+                  className="hover:text-foreground text-muted-foreground cursor-pointer hover:underline"
+                >
+                  Clear All
+                </span>
+              </div>
               {excludedVariables.map((variable, index) => (
                 <div
                   className="variable mb-2 flex h-10 items-center justify-between border px-4 py-2 text-sm"
