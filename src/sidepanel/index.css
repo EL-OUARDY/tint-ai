@@ -184,3 +184,8 @@ a {
 #code-container span.line {
   overflow: hidden !important;
 }
+
+/* Toast */
+[data-sonner-toast][data-styled=true] {
+  font-size: 1rem !important;
+}

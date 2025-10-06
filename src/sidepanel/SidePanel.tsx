@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import useStore from '@/hooks/useStore'
 import { loadCSSVariables } from '@/lib/utils'
 import { useEffect } from 'react'
+import { Toaster } from '@/components/ui/sonner'
 
 export const SidePanel = () => {
   const {
@@ -218,6 +219,7 @@ export const SidePanel = () => {
       <div className="bg-secondary p-2">
         <Footer />
       </div>
+      <Toaster position="top-left" />
     </main>
   )
 }

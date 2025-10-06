@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import useStore from '@/hooks/useStore'
 import GeminiService from '@/services/gemini'
+import { toast } from 'sonner'
 
 const promptExamples = [
   'E.g., A dark cyberpunk theme with neon purple and blue accents, perfect for a futuristic dashboard',
@@ -50,12 +51,14 @@ function GenerateTab() {
 
   function generate() {
     if (colorVariables.length === 0) {
-      alert('No CSS color variables were detected on this page.')
+      toast('No CSS color variables were detected on this page.')
       return
     }
 
     const result = GeminiService.generatePalette(getFilteredColorVariables(), '', apiKey)
-    if (!result) alert('Something went wrong. Please verify your API key and try again.')
+    result
+      .then((data) => console.log(data))
+      .catch((error) => toast('Something went wrong. Please verify your API key and try again.'))
   }
 
   return (
@@ -79,6 +82,7 @@ function GenerateTab() {
               className="text-muted-foreground hover:text-foreground transition-colors"
               href="https://aistudio.google.com/api-keys"
               title="Get your Gemini API key"
+              tabIndex={-1}
             >
               <ExternalLinkIcon className="size-4" />
             </a>

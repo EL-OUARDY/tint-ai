@@ -1,5 +1,6 @@
 import { COLOR_VARIABLE } from '@/shared/models'
 import { GoogleGenAI, MediaResolution, Type } from '@google/genai'
+import { toast } from 'sonner'
 
 class GeminiService {
   async generatePalette(palette: COLOR_VARIABLE[], description: string, apiKey: string) {
@@ -62,8 +63,11 @@ class GeminiService {
       })
 
       if (response && response.text) return JSON.parse(response.text)
-      else return null
+
+      return null
     } catch (error) {
+      console.error(error)
+      toast('Something went wrong. Please verify your API key and try again.')
       return null
     }
   }
