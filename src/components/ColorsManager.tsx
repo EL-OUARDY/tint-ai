@@ -105,6 +105,7 @@ function ColorsManager({ showExcludedColors = true }: Props) {
           </div>
         </DrawerContent>
       </Drawer>
+
       {/* Colors list */}
       <div className="w-full">
         {excludedVariables.length > 0 && (
@@ -161,8 +162,9 @@ function ColorsManager({ showExcludedColors = true }: Props) {
           </div>
         ))}
       </div>
+
       {/* Excluded List */}
-      {excludedVariables.length > 0 && (
+      {excludedVariables.length > 0 && showExcludedColors && (
         <div className="my-4 w-full">
           <div className="mb-4 flex items-center justify-between px-4">
             <h3 className="font-title text-center text-base">
