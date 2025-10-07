@@ -90,49 +90,54 @@ function ColorsManager({ showExcludedColors = true }: Props) {
         </DrawerContent>
       </Drawer>
       {/* Colors list */}
-      {getFilteredColorVariables().map((colorVar, index) => (
-        <div
-          key={index}
-          className="color hover:bg-muted mb-1 flex items-center justify-between border px-4 py-2 text-sm"
-        >
-          <div className="flex flex-col gap-1 pr-2">
-            <span className="select-text">{colorVar.name}</span>
-            <div className="text-muted-foreground flex items-center gap-1 text-xs">
-              <span className="select-text">{colorVar.value}</span>
-              <span>|</span>
-              <button
-                onClick={(e) => {
-                  setExcludedVariables([...excludedVariables, colorVar.name])
-                }}
-                className="text-foreground cursor-pointer hover:underline"
-              >
-                Exclude
-              </button>
-              <span>|</span>
-              <button
-                onClick={(e) => {
-                  setColorVariables(
-                    colorVariables.map((c) =>
-                      c.name === colorVar.name ? { ...c, value: c.initial } : c,
-                    ),
-                  )
-                }}
-                className="text-foreground cursor-pointer hover:underline"
-                title={colorVar.initial}
-              >
-                Reset
-              </button>
-            </div>
-          </div>
+      <div className="w-full">
+        <h3 className="font-title mt-1 mb-2 px-4 text-center text-base">
+          Active Variables <span>({getFilteredColorVariables().length})</span>
+        </h3>
+        {getFilteredColorVariables().map((colorVar, index) => (
           <div
-            onClick={() => setSelectedColor(colorVar)}
-            className="size-5 cursor-pointer border"
-            style={{
-              backgroundColor: colorVar.value,
-            }}
-          ></div>
-        </div>
-      ))}
+            key={index}
+            className="color hover:bg-muted mb-1 flex items-center justify-between border px-4 py-2 text-sm"
+          >
+            <div className="flex flex-col gap-1 pr-2">
+              <span className="select-text">{colorVar.name}</span>
+              <div className="text-muted-foreground flex items-center gap-1 text-xs">
+                <span className="select-text">{colorVar.value}</span>
+                <span>|</span>
+                <button
+                  onClick={(e) => {
+                    setExcludedVariables([...excludedVariables, colorVar.name])
+                  }}
+                  className="text-foreground cursor-pointer hover:underline"
+                >
+                  Exclude
+                </button>
+                <span>|</span>
+                <button
+                  onClick={(e) => {
+                    setColorVariables(
+                      colorVariables.map((c) =>
+                        c.name === colorVar.name ? { ...c, value: c.initial } : c,
+                      ),
+                    )
+                  }}
+                  className="text-foreground cursor-pointer hover:underline"
+                  title={colorVar.initial}
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+            <div
+              onClick={() => setSelectedColor(colorVar)}
+              className="size-5 cursor-pointer border"
+              style={{
+                backgroundColor: colorVar.value,
+              }}
+            ></div>
+          </div>
+        ))}
+      </div>
       {/* Excluded List */}
       {excludedVariables.length > 0 && (
         <div className="my-4 w-full">
