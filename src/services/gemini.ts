@@ -1,9 +1,13 @@
-import { COLOR_VARIABLE } from '@/shared/models'
+import { COLOR_VARIABLE, GENERATED_PALETTE } from '@/shared/models'
 import { GoogleGenAI, MediaResolution, Type } from '@google/genai'
 import { toast } from 'sonner'
 
 class GeminiService {
-  async generatePalette(palette: COLOR_VARIABLE[], description: string, apiKey: string) {
+  async generatePalette(
+    palette: COLOR_VARIABLE[],
+    description: string,
+    apiKey: string,
+  ): Promise<GENERATED_PALETTE | null> {
     try {
       const ai = new GoogleGenAI({
         apiKey: apiKey,
@@ -61,6 +65,8 @@ class GeminiService {
         config,
         contents,
       })
+
+      console.log(this.getSystemPrompt(palette))
 
       if (response && response.text) return JSON.parse(response.text)
 

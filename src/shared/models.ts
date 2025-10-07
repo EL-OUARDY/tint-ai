@@ -3,3 +3,8 @@ export interface COLOR_VARIABLE {
   value: string
   initial: string
 }
+
+export interface GENERATED_PALETTE {
+  name: string
+  colors: Omit<COLOR_VARIABLE, 'initial'>[]
+}

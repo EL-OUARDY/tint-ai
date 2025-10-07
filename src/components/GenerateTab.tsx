@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Input from '@/components/ui/input'
-import { ExternalLinkIcon, KeyRoundIcon } from 'lucide-react'
+import { ExternalLinkIcon, KeyRoundIcon, Loader2Icon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import useStore from '@/hooks/useStore'
 import GeminiService from '@/services/gemini'
 import { toast } from 'sonner'
+import { COLOR_VARIABLE } from '@/shared/models'
+import { GENERATED_PALETTE } from '../shared/models'
 
 const promptExamples = [
   'E.g., A dark cyberpunk theme with neon purple and blue accents, perfect for a futuristic dashboard',
@@ -22,9 +24,11 @@ const promptExamples = [
 ]
 
 function GenerateTab() {
-  const { colorVariables, getFilteredColorVariables } = useStore()
+  const { colorVariables, getFilteredColorVariables, setColorVariables } = useStore()
   const [prompt, setPrompt] = useState('')
   const [apiKey, setApiKey] = useState('')
+  const [generatedPalette, setGeneratedPalete] = useState<GENERATED_PALETTE | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const randomPlaceholder = useRef<string>(
     promptExamples[Math.floor(Math.random() * promptExamples.length)],
@@ -55,10 +59,26 @@ function GenerateTab() {
       return
     }
 
-    const result = GeminiService.generatePalette(getFilteredColorVariables(), '', apiKey)
+    setIsLoading(true)
+    const result = GeminiService.generatePalette(getFilteredColorVariables(), prompt, apiKey)
     result
-      .then((data) => console.log(data))
+      .then((generated) => {
+        if (generated) {
+          setGeneratedPalete(generated)
+          const newPalette = colorVariables.map((color) => {
+            const match = generated.colors.find(
+              (generatedColor: Omit<COLOR_VARIABLE, 'initial'>) =>
+                generatedColor.name === color.name,
+            )
+            return match ? { ...color, value: match.value } : color
+          })
+          setColorVariables(newPalette)
+        }
+      })
       .catch((error) => toast('Something went wrong. Please verify your API key and try again.'))
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   return (
@@ -103,11 +123,24 @@ function GenerateTab() {
         </div>
 
         <div className="controls mt-auto flex justify-end gap-2">
-          <Button variant={'outline'} className="">
-            Save
-          </Button>
-          <Button variant={'default'} onClick={generate} disabled={prompt && apiKey ? false : true}>
-            Generate
+          {generatedPalette && (
+            <Button variant={'outline'} className="">
+              Save
+            </Button>
+          )}
+
+          <Button
+            onClick={generate}
+            disabled={prompt && apiKey && !isLoading ? false : true}
+            variant={'default'}
+          >
+            {isLoading ? (
+              <>
+                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" /> Please wait
+              </>
+            ) : (
+              'Generate'
+            )}
           </Button>
         </div>
       </div>
