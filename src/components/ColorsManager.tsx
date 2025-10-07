@@ -81,11 +81,14 @@ function ColorsManager({ showExcludedColors = true }: Props) {
               <div className="mx-auto flex w-3/4 gap-2">
                 <Button
                   onClick={(e) => {
-                    setColorVariables(
-                      colorVariables.map((c) =>
-                        c.name === selectedColor?.name ? { ...c, value: c.initial } : c,
-                      ),
-                    )
+                    if (selectedColor) {
+                      setColorVariables(
+                        colorVariables.map((c) =>
+                          c.name === selectedColor.name ? { ...c, value: c.initial } : c,
+                        ),
+                      )
+                      setSelectedColor({ ...selectedColor, value: selectedColor.initial })
+                    }
                   }}
                   variant="outline"
                   className="w-full"
