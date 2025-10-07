@@ -2,7 +2,7 @@ import { isValidCssColor } from '@/lib/utils'
 import { COLOR_VARIABLE } from '@/shared/models'
 
 // Function to extract CSS variables from the page
-function extractCSSVariables(): COLOR_VARIABLE[] {
+function extractCSSVariables(oldVariables: COLOR_VARIABLE[]): COLOR_VARIABLE[] {
   const htmlElement = document.querySelector('html')
 
   if (!htmlElement) {
@@ -17,10 +17,11 @@ function extractCSSVariables(): COLOR_VARIABLE[] {
 
     Array.from(styleMap).forEach(([propertyName, propertyValue]) => {
       if (propertyName.startsWith('--') && !propertyName.startsWith('--tw')) {
+        const oldVariable = oldVariables.find((v) => v.name === propertyName)
         cssVariables.push({
           name: propertyName,
           value: propertyValue.toString(),
-          initial: propertyValue.toString(),
+          initial: oldVariable?.initial || propertyValue.toString(),
         })
       }
     })
@@ -52,8 +53,13 @@ function extractCSSVariables(): COLOR_VARIABLE[] {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // Load CSS variables from the current page
   if (request.action === 'getCSSVariables') {
-    const variables = extractCSSVariables()
-    sendResponse({ variables })
+    // If the caller passed previous/old variables, log them for debugging
+    try {
+      const variables = extractCSSVariables((request as any).oldVariables as COLOR_VARIABLE[])
+      sendResponse({ variables })
+    } catch (e) {
+      //ignore
+    }
   }
 
   // Apply CSS variables sent from the sidepanel, skipping excluded ones

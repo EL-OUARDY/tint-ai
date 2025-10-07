@@ -72,6 +72,8 @@ function GenerateTab() {
             )
             return match ? { ...color, value: match.value } : color
           })
+
+          console.log('Generated palette:', newPalette)
           setColorVariables(newPalette)
         }
       })

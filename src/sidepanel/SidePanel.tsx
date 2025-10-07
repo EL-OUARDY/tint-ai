@@ -22,11 +22,11 @@ export const SidePanel = () => {
 
   // Load CSS variables from the current page
   useEffect(() => {
-    const loadVars = async () => {
-      const vars = await loadCSSVariables()
+    const loadPageVariables = async () => {
+      const vars = await loadCSSVariables(colorVariables)
       setColorVariables(vars || [])
     }
-    loadVars()
+    loadPageVariables()
   }, [])
 
   // Save Excluded Variables in chrome storage
@@ -78,7 +78,7 @@ export const SidePanel = () => {
         }
 
         // Reload CSS variables from the page
-        const vars = await loadCSSVariables()
+        const vars = await loadCSSVariables(colorVariables)
         if (isMounted) setColorVariables(vars || [])
       } catch (error) {
         console.error('Error refreshing variables on tab change:', error)

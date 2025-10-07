@@ -16,7 +16,9 @@ export function isValidCssColor(value: ColorTypes) {
   }
 }
 
-export async function loadCSSVariables(): Promise<COLOR_VARIABLE[] | undefined> {
+export async function loadCSSVariables(
+  oldVariables: COLOR_VARIABLE[] = [],
+): Promise<COLOR_VARIABLE[] | undefined> {
   try {
     // Get the active tab
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
@@ -35,7 +37,11 @@ export async function loadCSSVariables(): Promise<COLOR_VARIABLE[] | undefined> 
 
     try {
       // Send message to content script to get CSS variables
-      const response = await chrome.tabs.sendMessage(tab.id, { action: 'getCSSVariables' })
+      // Send previous variables as oldVariables so content script can log/use them
+      const response = await chrome.tabs.sendMessage(tab.id, {
+        action: 'getCSSVariables',
+        oldVariables,
+      })
 
       if (response?.variables && response.variables.length > 0) {
         console.log('Loaded CSS variables:', response.variables)
@@ -55,8 +61,10 @@ export async function loadCSSVariables(): Promise<COLOR_VARIABLE[] | undefined> 
         // Wait a bit for the script to load
         setTimeout(async () => {
           try {
+            // Retry and include oldVariables again
             const response = await chrome.tabs.sendMessage(tab.id!, {
               action: 'getCSSVariables',
+              oldVariables,
             })
             if (response?.variables && response.variables.length > 0) {
               console.log('Loaded CSS variables after injection:', response.variables)

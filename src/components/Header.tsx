@@ -13,10 +13,9 @@ import { buttonVariants } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import useStore from '@/hooks/useStore'
-import { loadCSSVariables } from '@/lib/utils'
 
 function Header() {
-  const { setColorVariables } = useStore()
+  const { colorVariables, setColorVariables } = useStore()
 
   const palettes = [
     'Dracula',
@@ -31,9 +30,8 @@ function Header() {
     'Midnight Coder',
   ]
 
-  async function loadVars() {
-    const vars = await loadCSSVariables()
-    setColorVariables(vars || [])
+  function loadInitialVariables() {
+    setColorVariables(colorVariables.map((color) => ({ ...color, value: color.initial })))
   }
 
   return (
@@ -76,18 +74,20 @@ function Header() {
       </Sheet>
 
       <div className="z-10 ml-auto flex gap-3">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button onClick={loadVars} aria-label="Refresh" type="button">
-                <RotateCwIcon className="text-muted-foreground hover:text-foreground z-10 size-[1.2rem] cursor-pointer transition-colors duration-300" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Refresh</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        {colorVariables.length > 0 && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button onClick={loadInitialVariables} aria-label="Refresh" type="button">
+                  <RotateCwIcon className="text-muted-foreground hover:text-foreground z-10 size-[1.2rem] cursor-pointer transition-colors duration-300" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Refresh</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
 
         <Sheet>
           <SheetTrigger asChild>
