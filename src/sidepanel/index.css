@@ -167,11 +167,12 @@ a {
 .react-colorful__alpha,
 .react-colorful__hue {
   height: 14px !important;
+  border-radius: 6px !important;
 }
 
 .react-colorful__hue {
+  margin-top: 6px !important;
   margin-bottom: 6px !important;
-  border-radius: 6px !important;
 }
 
 .react-colorful__pointer {

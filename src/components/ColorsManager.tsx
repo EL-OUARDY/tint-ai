@@ -39,25 +39,25 @@ function ColorsManager({ showExcludedColors = true }: Props) {
               <DrawerTitle className="sr-only">Pick a color.</DrawerTitle>
               <DrawerDescription className="text-muted-foreground flex flex-col gap-1 text-base tracking-wider select-text">
                 <span>{selectedColor?.name}</span>
-                <Input
-                  ref={colorInput}
-                  value={selectedColor?.value}
-                  onChange={(e) => {
-                    if (selectedColor) {
-                      setSelectedColor({ ...selectedColor, value: e.target.value })
-                      setColorVariables(
-                        colorVariables.map((c) =>
-                          c.name === selectedColor.name ? { ...c, value: e.target.value } : c,
-                        ),
-                      )
-                    }
-                  }}
-                  className="text-foreground mx-auto w-3/4 text-center text-sm"
-                />
               </DrawerDescription>
             </DrawerHeader>
 
             <div className="flex flex-col gap-4 pt-0">
+              <Input
+                ref={colorInput}
+                value={selectedColor?.value}
+                onChange={(e) => {
+                  if (selectedColor) {
+                    setSelectedColor({ ...selectedColor, value: e.target.value })
+                    setColorVariables(
+                      colorVariables.map((c) =>
+                        c.name === selectedColor.name ? { ...c, value: e.target.value } : c,
+                      ),
+                    )
+                  }
+                }}
+                className="text-foreground mx-auto w-3/4 text-center text-sm"
+              />
               <div className="flex items-center justify-center">
                 {selectedColor && (
                   <HexAlphaColorPicker
@@ -78,9 +78,22 @@ function ColorsManager({ showExcludedColors = true }: Props) {
                 )}
               </div>
 
-              <div className="mx-auto w-3/4">
+              <div className="mx-auto flex w-3/4 gap-2">
+                <Button
+                  onClick={(e) => {
+                    setColorVariables(
+                      colorVariables.map((c) =>
+                        c.name === selectedColor?.name ? { ...c, value: c.initial } : c,
+                      ),
+                    )
+                  }}
+                  variant="outline"
+                  className="w-full"
+                >
+                  Reset
+                </Button>
                 <DrawerClose asChild>
-                  <Button variant="outline" className="w-full">
+                  <Button variant="default" className="w-full">
                     Save
                   </Button>
                 </DrawerClose>
@@ -91,16 +104,23 @@ function ColorsManager({ showExcludedColors = true }: Props) {
       </Drawer>
       {/* Colors list */}
       <div className="w-full">
-        <h3 className="font-title mt-1 mb-2 px-4 text-center text-base">
-          Active Variables <span>({getFilteredColorVariables().length})</span>
-        </h3>
+        {excludedVariables.length > 0 && (
+          <h3 className="font-title mt-1 mb-2 px-4 text-center text-base">
+            Active Variables <span>({getFilteredColorVariables().length})</span>
+          </h3>
+        )}
         {getFilteredColorVariables().map((colorVar, index) => (
           <div
             key={index}
             className="color hover:bg-muted mb-1 flex items-center justify-between border px-4 py-2 text-sm"
           >
             <div className="flex flex-col gap-1 pr-2">
-              <span className="select-text">{colorVar.name}</span>
+              <span
+                onClick={() => setSelectedColor(colorVar)}
+                className="cursor-pointer select-text"
+              >
+                {colorVar.name}
+              </span>
               <div className="text-muted-foreground flex items-center gap-1 text-xs">
                 <span className="select-text">{colorVar.value}</span>
                 <span>|</span>
