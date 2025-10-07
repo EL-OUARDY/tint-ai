@@ -66,8 +66,6 @@ class GeminiService {
         contents,
       })
 
-      console.log(this.getSystemPrompt(palette))
-
       if (response && response.text) return JSON.parse(response.text)
 
       return null

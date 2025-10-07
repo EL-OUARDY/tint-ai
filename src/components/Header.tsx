@@ -1,4 +1,4 @@
-import { Github, LayersIcon, PanelLeft, RefreshCcwIcon, Trash2 } from 'lucide-react'
+import { Github, LayersIcon, PanelLeft, RotateCwIcon, Trash2 } from 'lucide-react'
 import {
   SheetTrigger,
   SheetContent,
@@ -80,7 +80,7 @@ function Header() {
           <Tooltip>
             <TooltipTrigger asChild>
               <button onClick={loadVars} aria-label="Refresh" type="button">
-                <RefreshCcwIcon className="text-muted-foreground hover:text-foreground z-10 size-[1.2rem] cursor-pointer transition-colors duration-300" />
+                <RotateCwIcon className="text-muted-foreground hover:text-foreground z-10 size-[1.2rem] cursor-pointer transition-colors duration-300" />
               </button>
             </TooltipTrigger>
             <TooltipContent>

@@ -81,6 +81,13 @@ function GenerateTab() {
       })
   }
 
+  // Check if Control key (or Command key on macOS) is held down and Enter is pressed
+  function handleTextareaKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+      generate()
+    }
+  }
+
   return (
     <div className="size-full max-h-full p-4">
       <div className="flex h-full flex-col gap-4">
@@ -89,6 +96,7 @@ function GenerateTab() {
           <Textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={handleTextareaKeyDown}
             placeholder={randomPlaceholder.current}
             id="prompt"
             className="flex-1"
