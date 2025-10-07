@@ -189,7 +189,7 @@ function ColorsManager({ showExcludedColors = true }: Props) {
                   setExcludedVariables(excludedVariables.filter((x) => x !== variable))
                 }
                 title="delete"
-                className="hover:bg-muted hover:text-foreground text-muted-foreground flex size-6 items-center justify-center border"
+                className="hover:bg-muted hover:text-foreground text-muted-foreground flex size-5 items-center justify-center border"
               >
                 <XIcon className="size-4" />
               </button>
