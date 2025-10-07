@@ -73,20 +73,18 @@ function Header() {
         </SheetContent>
       </Sheet>
 
-      <div className="z-10 ml-auto flex gap-3">
+      <div className="z-10 ml-auto flex items-center gap-2">
         {colorVariables.length > 0 && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button onClick={loadInitialVariables} aria-label="Refresh" type="button">
-                  <RotateCwIcon className="text-muted-foreground hover:text-foreground z-10 size-[1.2rem] cursor-pointer transition-colors duration-300" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Refresh</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <>
+            <span
+              onClick={loadInitialVariables}
+              title="Reset to default"
+              className="hover:text-foreground text-muted-foreground cursor-pointer text-sm hover:underline"
+            >
+              Reset
+            </span>
+            <span className="text-muted-foreground">|</span>
+          </>
         )}
 
         <Sheet>
