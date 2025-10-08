@@ -27,6 +27,7 @@ TintAI is a lightweight Chrome extension that helps you discover, edit and gener
 - ✨ Generate cohesive palettes using AI.
 - 🎨 Save and manage favorite palettes.
 - 📌 Export filtered variables as CSS.
+- ⚙️ Supports Chrome DevTools: inspect and modify CSS variables directly from the DevTools panel.
 
 ## Tech stack
 
