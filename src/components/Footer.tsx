@@ -119,7 +119,12 @@ function Footer() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <a href={REPO_LINK + '/issues'} target="_blank" rel="noopener noreferrer">
+              <a
+                href={REPO_LINK + '/issues'}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Report an issue on GitHub"
+              >
                 <svg
                   className="hover:text-foreground size-5 cursor-pointer transition-colors duration-300"
                   aria-hidden="true"
@@ -148,7 +153,7 @@ function Footer() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <a href={REPO_LINK} target="_blank">
+              <a href={REPO_LINK} target="_blank" aria-label="Open project repository on GitHub">
                 <svg
                   className="hover:text-foreground size-5 cursor-pointer transition-colors duration-300"
                   aria-hidden="true"
@@ -175,7 +180,12 @@ function Footer() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <a href={TWITTER_LINK} target="_blank" rel="noopener noreferrer">
+              <a
+                href={TWITTER_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open Twitter profile"
+              >
                 <svg
                   className="hover:text-foreground size-[1.1rem] cursor-pointer transition-colors duration-300"
                   aria-hidden="true"

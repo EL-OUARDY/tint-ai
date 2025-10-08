@@ -1,4 +1,5 @@
 import { defineManifest } from '@crxjs/vite-plugin'
+// @ts-ignore
 import packageData from '../package.json'
 
 //@ts-ignore
@@ -45,8 +46,10 @@ export default defineManifest({
         'icons/logo-48.png',
         'icons/logo-128.png',
       ],
-      matches: [],
+      // Match only http/https pages where the extension operates.
+      matches: ['http://*/*', 'https://*/*'],
     },
   ],
+  host_permissions: ['http://*/*', 'https://*/*'],
   permissions: ['sidePanel', 'storage', 'tabs', 'scripting', 'activeTab'],
 })
