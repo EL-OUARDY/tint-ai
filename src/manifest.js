@@ -33,6 +33,7 @@ export default defineManifest({
       run_at: 'document_idle',
     },
   ],
+  devtools_page: 'devtools.html',
   side_panel: {
     default_path: 'sidepanel.html',
   },

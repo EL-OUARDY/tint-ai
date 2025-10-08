@@ -4,13 +4,15 @@ import Footer from '@/components/Footer'
 import GenerateTab from '@/components/GenerateTab'
 import Header from '@/components/Header'
 import AiIcon from '@/components/ui/icons/ai'
+import { ThemeProvider } from '@/contexts/theme-provider'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import useStore from '@/hooks/useStore'
 import { loadCSSVariables } from '@/lib/utils'
 import { useEffect } from 'react'
 import { Toaster } from '@/components/ui/sonner'
+import '@/global.css'
 
-export const SidePanel = () => {
+export const UIWrapper = () => {
   const {
     colorVariables,
     setColorVariables,
@@ -196,50 +198,52 @@ export const SidePanel = () => {
   }, [savedPalettes])
 
   return (
-    <main className="flex h-screen flex-col">
-      <div className="bg-background p-2 pb-0">
-        <Header />
-      </div>
-      <div className="flex-1 overflow-hidden p-2">
-        <Tabs defaultValue="themes" className="flex h-full flex-col">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger
-              value="themes"
-              className="flex items-center gap-1 !text-[0.8rem] font-bold uppercase"
-            >
-              <span>Colors</span>
-              {colorVariables.length > 0 && (
-                <span className="font-normal">({colorVariables.length})</span>
-              )}
-            </TabsTrigger>
-            <TabsTrigger
-              value="customize"
-              className="flex items-center gap-1 !text-[0.8rem] font-bold uppercase"
-            >
-              <AiIcon className="size-4" />
-              <span>Generate</span>
-            </TabsTrigger>
-            <TabsTrigger value="contribute" className="!text-[0.8rem] font-bold uppercase">
-              Export
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="themes" className="flex-1 border">
-            <ColorsTab key={tabURL} />
-          </TabsContent>
-          <TabsContent value="customize" className="flex-1 border">
-            <GenerateTab key={tabURL} />
-          </TabsContent>
-          <TabsContent value="contribute" className="flex-1 border">
-            <ExportTab key={tabURL} />
-          </TabsContent>
-        </Tabs>
-      </div>
-      <div className="bg-secondary p-2">
-        <Footer />
-      </div>
-      <Toaster position="top-left" />
-    </main>
+    <ThemeProvider defaultTheme="system" storageKey="tintai-ui-theme">
+      <main className="flex h-screen flex-col">
+        <div className="bg-background p-2 pb-0">
+          <Header />
+        </div>
+        <div className="flex-1 overflow-hidden p-2">
+          <Tabs defaultValue="themes" className="flex h-full flex-col">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger
+                value="themes"
+                className="flex items-center gap-1 !text-[0.8rem] font-bold uppercase"
+              >
+                <span>Colors</span>
+                {colorVariables.length > 0 && (
+                  <span className="font-normal">({colorVariables.length})</span>
+                )}
+              </TabsTrigger>
+              <TabsTrigger
+                value="customize"
+                className="flex items-center gap-1 !text-[0.8rem] font-bold uppercase"
+              >
+                <AiIcon className="size-4" />
+                <span>Generate</span>
+              </TabsTrigger>
+              <TabsTrigger value="contribute" className="!text-[0.8rem] font-bold uppercase">
+                Export
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="themes" className="flex-1 border">
+              <ColorsTab key={tabURL} />
+            </TabsContent>
+            <TabsContent value="customize" className="flex-1 border">
+              <GenerateTab key={tabURL} />
+            </TabsContent>
+            <TabsContent value="contribute" className="flex-1 border">
+              <ExportTab key={tabURL} />
+            </TabsContent>
+          </Tabs>
+        </div>
+        <div className="bg-secondary p-2">
+          <Footer />
+        </div>
+        <Toaster position="top-left" />
+      </main>
+    </ThemeProvider>
   )
 }
 
-export default SidePanel
+export default UIWrapper

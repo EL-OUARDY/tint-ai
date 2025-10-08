@@ -1,6 +1,6 @@
 {
   "name": "tint-ai",
-  "displayName": "TintAI",
+  "displayName": "TintAI - Tweak your CSS color variables",
   "version": "1.0.0",
   "author": "wadi3",
   "description": "TintAI: Extension for discovering, editing & generating CSS color palettes. Detects variables, live tweaks, AI generation & export.",
