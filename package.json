@@ -3,7 +3,7 @@
   "displayName": "TintAI",
   "version": "1.0.0",
   "author": "wadi3",
-  "description": "TintAI extension lets you manage your CSS color variables and create stunning color palettes using AI. It analyzes your page's existing colors and helps you generate beautiful, cohesive palettes that actually make sense for your design. No more endless tweaking – just point, click, and get colors that work.",
+  "description": "TintAI: Extension for discovering, editing & generating CSS color palettes. Detects variables, live tweaks, AI generation & export.",
   "type": "module",
   "license": "MIT",
   "keywords": [
