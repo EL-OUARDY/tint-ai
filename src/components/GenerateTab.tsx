@@ -32,7 +32,13 @@ const promptExamples = [
 ]
 
 function GenerateTab() {
-  const { colorVariables, getFilteredColorVariables, setColorVariables } = useStore()
+  const {
+    colorVariables,
+    getFilteredColorVariables,
+    setColorVariables,
+    savedPalettes,
+    setSavedPalettes,
+  } = useStore()
   const [prompt, setPrompt] = useState('')
   const [apiKey, setApiKey] = useState('')
   const [generatedPalette, setGeneratedPalete] = useState<GENERATED_PALETTE | null>(null)
@@ -116,7 +122,8 @@ function GenerateTab() {
                 onKeyDown={handleTextareaKeyDown}
                 placeholder={randomPlaceholder.current}
                 id="prompt"
-                className="flex-1"
+                className="flex-1 disabled:!cursor-default"
+                disabled={isLoading ? true : false}
               />
             </div>
 
@@ -138,6 +145,7 @@ function GenerateTab() {
                 icon={<KeyRoundIcon className="size-4" />}
                 value={apiKey}
                 onChange={handleApiKeyChange}
+                disabled={isLoading ? true : false}
                 className="placeholder:text-muted-foreground"
               />
               <small className="text-muted-foreground text-xs">
@@ -154,6 +162,10 @@ function GenerateTab() {
             <Button
               onClick={() => {
                 setIsSaved(true)
+                setSavedPalettes([
+                  ...savedPalettes,
+                  { name: generatedPalette.name, colors: getFilteredColorVariables() },
+                ])
               }}
               variant={'outline'}
               size={'sm'}

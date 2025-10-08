@@ -18,6 +18,7 @@ export const SidePanel = () => {
     setExcludedVariables,
     tabURL,
     setTabURL,
+    savedPalettes,
   } = useStore()
 
   // Load CSS variables from the current page
@@ -176,6 +177,23 @@ export const SidePanel = () => {
     // Only run when there are color variables (or when they became empty)
     applyVariablesToPage()
   }, [colorVariables, excludedVariables])
+
+  // Save fovorite palettes in local storage
+  useEffect(() => {
+    const saveFavoritePalettes = async () => {
+      try {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+        if (tab?.url) {
+          const key = tab.url + '--favorites'
+          localStorage.setItem(key, JSON.stringify(savedPalettes))
+        }
+      } catch (error) {
+        console.error('Error getting current tab URL:', error)
+      }
+    }
+
+    saveFavoritePalettes()
+  }, [savedPalettes])
 
   return (
     <main className="flex h-screen flex-col">
