@@ -29,7 +29,7 @@ export const SidePanel = () => {
     loadPageVariables()
   }, [])
 
-  // Save Excluded Variables in chrome storage
+  // Save Excluded Variables in local storage
   useEffect(() => {
     const saveExcludedVariables = async () => {
       try {

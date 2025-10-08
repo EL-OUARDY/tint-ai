@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Input from '@/components/ui/input'
-import { ExternalLinkIcon, KeyRoundIcon, Loader2Icon } from 'lucide-react'
+import {
+  CornerDownLeft,
+  ExternalLinkIcon,
+  HeartIcon,
+  KeyRoundIcon,
+  Loader2Icon,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -9,6 +15,8 @@ import GeminiService from '@/services/gemini'
 import { toast } from 'sonner'
 import { COLOR_VARIABLE } from '@/shared/models'
 import { GENERATED_PALETTE } from '../shared/models'
+import ColorsTab from '@/components/ColorsTab'
+import clsx from 'clsx'
 
 const promptExamples = [
   'E.g., A dark cyberpunk theme with neon purple and blue accents, perfect for a futuristic dashboard',
@@ -29,6 +37,7 @@ function GenerateTab() {
   const [apiKey, setApiKey] = useState('')
   const [generatedPalette, setGeneratedPalete] = useState<GENERATED_PALETTE | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isSaved, setIsSaved] = useState(false)
 
   const randomPlaceholder = useRef<string>(
     promptExamples[Math.floor(Math.random() * promptExamples.length)],
@@ -91,67 +100,103 @@ function GenerateTab() {
   }
 
   return (
-    <div className="size-full max-h-full p-4">
+    <div className="size-full max-h-full py-4">
       <div className="flex h-full flex-col gap-4">
-        <div className="flex w-full flex-1 flex-col gap-3">
-          <Label htmlFor="message">Prompt</Label>
-          <Textarea
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            onKeyDown={handleTextareaKeyDown}
-            placeholder={randomPlaceholder.current}
-            id="prompt"
-            className="flex-1"
-          />
-        </div>
+        {generatedPalette ? (
+          <div className="size-full px-2">
+            <ColorsTab showExcludedColors={false} showActiveLabel={false} />
+          </div>
+        ) : (
+          <>
+            <div className="flex w-full flex-1 flex-col gap-3 px-4">
+              <Label htmlFor="message">Prompt</Label>
+              <Textarea
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                onKeyDown={handleTextareaKeyDown}
+                placeholder={randomPlaceholder.current}
+                id="prompt"
+                className="flex-1"
+              />
+            </div>
 
-        <div className="mb-4 grid w-full gap-3">
-          <Label htmlFor="message" className="flex items-center gap-2">
-            Gemini API Key
-            <a
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              href="https://aistudio.google.com/api-keys"
-              title="Get your Gemini API key"
-              tabIndex={-1}
-            >
-              <ExternalLinkIcon className="size-4" />
-            </a>
-          </Label>
-          <Input
-            type="password"
-            placeholder="Enter your API Key"
-            icon={<KeyRoundIcon className="size-4" />}
-            value={apiKey}
-            onChange={handleApiKeyChange}
-            className="placeholder:text-muted-foreground"
-          />
-          <small className="text-muted-foreground text-xs">
-            Your API key will be securely stored in your browser (
-            <span className="text-sky-500">chrome.storage.local</span>) and never sent to our
-            servers.
-          </small>
-        </div>
+            <div className="mb-4 grid w-full gap-3 px-4">
+              <Label htmlFor="message" className="flex items-center gap-2">
+                Gemini API Key
+                <a
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  href="https://aistudio.google.com/api-keys"
+                  title="Get your Gemini API key"
+                  tabIndex={-1}
+                >
+                  <ExternalLinkIcon className="size-4" />
+                </a>
+              </Label>
+              <Input
+                type="password"
+                placeholder="Enter your API Key"
+                icon={<KeyRoundIcon className="size-4" />}
+                value={apiKey}
+                onChange={handleApiKeyChange}
+                className="placeholder:text-muted-foreground"
+              />
+              <small className="text-muted-foreground text-xs">
+                Your API key will be securely stored in your browser (
+                <span className="text-sky-500">chrome.storage.local</span>) and never sent to our
+                servers.
+              </small>
+            </div>
+          </>
+        )}
 
-        <div className="controls mt-auto flex justify-end gap-2">
+        <div className="controls mt-auto flex justify-end gap-2 px-4">
           {generatedPalette && (
-            <Button variant={'outline'} className="">
-              Save
+            <Button
+              onClick={() => {
+                setIsSaved(true)
+              }}
+              variant={'outline'}
+              size={'sm'}
+              className="flex items-center gap-2"
+            >
+              <HeartIcon className={clsx('size-4', isSaved && 'fill-red-500 stroke-red-500')} />{' '}
+              {isSaved ? 'Saved' : 'Save'}
             </Button>
           )}
 
-          <Button
-            onClick={generate}
-            disabled={prompt && apiKey && !isLoading ? false : true}
-            variant={'default'}
-          >
-            {isLoading ? (
-              <>
-                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" /> Please wait
-              </>
-            ) : (
-              'Generate'
-            )}
-          </Button>
+          {!generatedPalette && (
+            <Button
+              onClick={generate}
+              disabled={prompt && apiKey && !isLoading ? false : true}
+              variant={'default'}
+              size={'sm'}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2Icon className="mr-2 size-4 animate-spin" /> Please wait
+                </>
+              ) : (
+                <>
+                  Generate
+                  <CornerDownLeft className="ml-2 size-4" />
+                </>
+              )}
+            </Button>
+          )}
+
+          {generatedPalette && (
+            <Button
+              onClick={() => {
+                setGeneratedPalete(null)
+                setPrompt('')
+                setIsSaved(false)
+              }}
+              variant={'default'}
+              size={'sm'}
+            >
+              New Prompt
+            </Button>
+          )}
         </div>
       </div>
     </div>

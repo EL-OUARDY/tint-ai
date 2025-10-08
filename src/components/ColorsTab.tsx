@@ -1,14 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
 import useStore from '@/hooks/useStore'
 import { RefreshCcwIcon, XIcon } from 'lucide-react'
-import ColorsManager from '@/components/ColorsManager'
 import { loadCSSVariables } from '@/lib/utils'
-
-function ColorsTab() {
-  const { colorVariables, setColorVariables } = useStore()
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerClose,
+} from '@/components/ui/drawer'
+import Input from '@/components/ui/input'
+import { COLOR_VARIABLE } from '@/shared/models'
+import { HexAlphaColorPicker } from 'react-colorful'
+interface Props {
+  showExcludedColors?: boolean
+  showActiveLabel?: boolean
+}
+function ColorsTab({ showExcludedColors = true, showActiveLabel = true }: Props) {
+  const {
+    colorVariables,
+    getFilteredColorVariables,
+    setColorVariables,
+    excludedVariables,
+    setExcludedVariables,
+  } = useStore()
   const [scrollAreaHeight, setScrollAreaHeight] = useState<number>()
+  const [selectedColor, setSelectedColor] = useState<COLOR_VARIABLE | null>(null)
+  const colorInput = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const container = document.getElementById('colors-container') as HTMLDivElement
@@ -27,7 +48,173 @@ function ColorsTab() {
     <div className="size-full max-h-full p-2" id="colors-container">
       {colorVariables.length > 0 && (
         <ScrollArea style={{ height: scrollAreaHeight || 0 }} className="w-full">
-          <ColorsManager />
+          {/* Color picker drawer */}
+          <Drawer open={!!selectedColor} onClose={() => setSelectedColor(null)}>
+            <DrawerContent>
+              <div className="mx-auto w-full max-w-sm py-4">
+                <DrawerHeader className="text-left">
+                  <DrawerTitle className="sr-only">Pick a color.</DrawerTitle>
+                  <DrawerDescription className="text-muted-foreground flex flex-col gap-1 text-base tracking-wider select-text">
+                    <span>{selectedColor?.name}</span>
+                  </DrawerDescription>
+                </DrawerHeader>
+
+                <div className="flex flex-col gap-4 pt-0">
+                  <Input
+                    ref={colorInput}
+                    value={selectedColor?.value}
+                    onChange={(e) => {
+                      if (selectedColor) {
+                        setSelectedColor({ ...selectedColor, value: e.target.value })
+                        setColorVariables(
+                          colorVariables.map((c) =>
+                            c.name === selectedColor.name ? { ...c, value: e.target.value } : c,
+                          ),
+                        )
+                      }
+                    }}
+                    className="text-foreground mx-auto w-3/4 text-center text-sm"
+                  />
+                  <div className="flex items-center justify-center">
+                    {selectedColor && (
+                      <HexAlphaColorPicker
+                        color={selectedColor.value}
+                        onChange={(newColor) => {
+                          setSelectedColor({ ...selectedColor, value: newColor })
+                          setColorVariables(
+                            colorVariables.map((c) =>
+                              c.name === selectedColor.name ? { ...c, value: newColor } : c,
+                            ),
+                          )
+                        }}
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        className="!w-3/4"
+                      />
+                    )}
+                  </div>
+
+                  <div className="mx-auto flex w-3/4 gap-2">
+                    <Button
+                      onClick={(e) => {
+                        if (selectedColor) {
+                          setColorVariables(
+                            colorVariables.map((c) =>
+                              c.name === selectedColor.name ? { ...c, value: c.initial } : c,
+                            ),
+                          )
+                          setSelectedColor({ ...selectedColor, value: selectedColor.initial })
+                        }
+                      }}
+                      variant="outline"
+                      size={'sm'}
+                      className="w-full"
+                    >
+                      Reset
+                    </Button>
+                    <DrawerClose asChild>
+                      <Button variant="default" className="w-full" size={'sm'}>
+                        Save
+                      </Button>
+                    </DrawerClose>
+                  </div>
+                </div>
+              </div>
+            </DrawerContent>
+          </Drawer>
+
+          {/* Colors list */}
+          <div className="w-full">
+            {showActiveLabel && excludedVariables.length > 0 && (
+              <h3 className="font-title mt-1 mb-2 px-4 text-center text-base">
+                Active Variables <span>({getFilteredColorVariables().length})</span>
+              </h3>
+            )}
+            {getFilteredColorVariables().map((colorVar, index) => (
+              <div
+                key={index}
+                className="color hover:bg-muted mb-1 flex items-center justify-between border px-4 py-2 text-sm"
+              >
+                <div className="flex flex-col gap-1 pr-2">
+                  <span
+                    onClick={() => setSelectedColor(colorVar)}
+                    className="cursor-pointer select-text"
+                  >
+                    {colorVar.name}
+                  </span>
+                  <div className="text-muted-foreground flex items-center gap-1 text-xs">
+                    <span className="select-text">{colorVar.value}</span>
+                    <span>|</span>
+                    <button
+                      onClick={(e) => {
+                        setExcludedVariables([...excludedVariables, colorVar.name])
+                      }}
+                      className="text-foreground cursor-pointer hover:underline"
+                    >
+                      Exclude
+                    </button>
+                    <span>|</span>
+                    <button
+                      onClick={(e) => {
+                        setColorVariables(
+                          colorVariables.map((c) =>
+                            c.name === colorVar.name ? { ...c, value: c.initial } : c,
+                          ),
+                        )
+                      }}
+                      className="text-foreground cursor-pointer hover:underline"
+                      title={colorVar.initial}
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+                <div
+                  onClick={() => setSelectedColor(colorVar)}
+                  className="size-5 cursor-pointer border"
+                  style={{
+                    backgroundColor: colorVar.value,
+                  }}
+                ></div>
+              </div>
+            ))}
+          </div>
+
+          {/* Excluded List */}
+          {excludedVariables.length > 0 && showExcludedColors && (
+            <div className="my-4 w-full">
+              <div className="mb-4 flex items-center justify-between px-4">
+                <h3 className="font-title text-center text-base">
+                  Excluded Variables <span>({excludedVariables.length})</span>
+                </h3>
+                <span
+                  onClick={() => setExcludedVariables([])}
+                  title="Clear excluded variables"
+                  className="hover:text-foreground text-muted-foreground cursor-pointer hover:underline"
+                >
+                  Clear All
+                </span>
+              </div>
+              {excludedVariables.map((variable, index) => (
+                <div
+                  className="variable mb-2 flex h-10 items-center justify-between border px-4 py-2 text-sm"
+                  key={index}
+                >
+                  <span>{variable}</span>
+                  <button
+                    onClick={() =>
+                      setExcludedVariables(excludedVariables.filter((x) => x !== variable))
+                    }
+                    title="delete"
+                    className="hover:bg-muted hover:text-foreground text-muted-foreground flex size-5 items-center justify-center border"
+                  >
+                    <XIcon className="size-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </ScrollArea>
       )}
       {/* Empty list */}
