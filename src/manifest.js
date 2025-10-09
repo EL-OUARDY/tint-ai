@@ -51,4 +51,7 @@ export default defineManifest({
   ],
   host_permissions: ['http://*/*', 'https://*/*'],
   permissions: ['sidePanel', 'storage', 'tabs', 'scripting', 'activeTab'],
+  content_security_policy: {
+    extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';",
+  },
 })
